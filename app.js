@@ -5,6 +5,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var routes = require('./routes');
 var users = require('./routes/user');
@@ -23,6 +24,43 @@ app.use(cookieParser());
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
+
+// database
+mongoose.connect('mongodb://localhost:12345/test');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  // yay!
+  console.log('connected to DB');
+  var node_schema = mongoose.Schema({
+    id: Number,
+    geometry: {
+        type: String,
+        coordinates: [],
+    },
+    type: String,
+    properties: {
+        id: Number,
+        lat: Number,
+        lon: Number,
+        version: Number,
+        timestamp: Number,
+        changeset: Number,
+        uid: Number,
+        user: String,
+        tags: {}
+    }
+  });
+  var Node = mongoose.model('Node', node_schema);
+  console.log('finding nodes');
+  Node.find().limit(20).exec(function(err, nodes) {
+      if (err) {
+          return console.error(err);
+      }
+      console.log(nodes)
+  });
+
+});
 
 app.get('/', routes.index);
 app.get('/users', users.list);
