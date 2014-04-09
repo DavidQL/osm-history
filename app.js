@@ -25,17 +25,15 @@ app.use(app.router);
 
 // database
 var db = require('./db/db_adapter');
-db.connection.once('open', function callback () {
-  db.Node.find().limit(20).exec(function(err, nodes) {
-      if (err) {
-          return console.error(err);
-      }
-      console.log(nodes)
-  });
+db.connection.once('open', function callback () {});
+
+app.all('*', function(request, response, next) {
+  request.db = db;
+  next();
 });
 
 app.get('/', routes.index);
-app.get('/users', users.list);
+app.get('/users/:username/nodes', users.nodes);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
