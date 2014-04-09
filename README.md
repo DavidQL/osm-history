@@ -13,4 +13,4 @@ Currently this doesn't do much of anything. Prototype, setup code.
 * Run app with automatic file reloading: `nodemon ./bin/www`
 * OR Run app without automatic file reloading: `npm start`
 
-Make sure to update the mongodb URL in `app.js` to point to your locally running MongoDB instance.
+Make sure to run this while physically on campus or using a CU VPN, in order to connect to the database.
