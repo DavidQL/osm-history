@@ -18,5 +18,5 @@ Make sure to run this while physically on campus or using a CU VPN, in order to 
 # How To Use
 * Visit `localhost:3000` for a sample welcome message
 * Visit `localhost:3000/users/<username>/nodes` for a listing of the first 20 nodes found for `<username>`
-* Visit `localhost:3000/d3/<username/` for a demonstration of the D3 plotting library. The `<username>`'s nodes per timestamp will be plotted for the first 200 nodes found. No labels yet, sorry!
-  * A good example is `localhost:3000/d3/woodpeck_fixbot` since the user appears to be a bot
+* Visit `localhost:3000/d3/<username/` for a demonstration of the D3 plotting library. The `<username>`'s nodes per timestamp will be plotted for the first 200 nodes found.
+  * A good example is `localhost:3000/d3/woodpeck_fixbot` since the user appears to be a bot (if you're on the denver_boulder db)
