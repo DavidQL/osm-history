@@ -1,7 +1,5 @@
-/* GET home page. */
+var _ = require('underscore');
+
 exports.index = function(req, res){
-  res.render('index', { 
-  	currentDb: req.session.currentDb || req.db.defaultDbName,
-  	allDbs: req.db.allDbs
-  });
+  res.render('index', _.extend(res.config, {}));
 };

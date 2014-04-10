@@ -1,12 +1,12 @@
-/* GET d3 test page. */
+var _ = require('underscore');
+
 exports.d3 = function(req, res){
   var username = req.params.username;
   var nodes = req.db.Node.find({'properties.user': username}).limit(200).exec(function(err, node) {
-    res.render('d3', { 
+    res.render('d3', _.extend(res.config, { 
       data: node, 
       title: 'D3 Test', 
-      user: username,
-      currentDb: req.db.currentDb,
-      allDbs: req.db.allDbs }); 
+      user: username
+    }));
   });
 };

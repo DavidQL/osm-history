@@ -33,7 +33,10 @@ module.exports = function(app) {
 	  // initial setup
 	  request.db = db;
 	  request.db.defaultDbName = config.db.defaultDbName;
-
+	  response.config = {
+	  	currentDb: request.session.currentDb || request.db.defaultDbName,
+	  	allDbs: request.db.allDbs
+	  };
 	  next();
 	});
 	return db;
