@@ -5,6 +5,11 @@ header {
   padding: 10px;
   background: lightgray;
 }
+header span.currentDb {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  margin: 0 10px;
+}
 #main {
   padding: 20px;
 }

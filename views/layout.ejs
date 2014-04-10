@@ -16,6 +16,7 @@
       <span class="chooseDb">
         Choose a new DB:
         <select>
+          <option value="">Choose...</option>
           <% allDbs.forEach(function(db) { %>
             <option value="<%= db %>"><%= db %></option>
           <% }) %>
