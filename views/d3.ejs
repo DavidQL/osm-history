@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    
+    <style>
+      .chart div {
+        font: 10px sans-serif;
+        background-color: steelblue;
+        text-align: right;
+        padding: 3px;
+        margin: 1px;
+        color: white;
+      }
+      .chart text.value {
+        fill: white;
+      }
+ 
+      .chart text.name {
+        fill: #000;
+      }
+    </style>
+
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp</p>
+    <div class="chart"></div>
+
+    <script>
+    var chartData = [];
+    var timeStamps = {};
+    var names = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    // Extract the backend Express data (all nodes stored in the variable name 'data')
+    var localData = <%- JSON.stringify(data) %>;
+
+    // Loop over all nodes and create a timestamp dictionary to count the occurence of each timestamp
+    for (var i = localData.length - 1; i >= 0; i--) {
+      if (timeStamps[localData[i].properties.timestamp])
+      {
+        timeStamps[localData[i].properties.timestamp]++;
+      }
+      else
+      {
+        timeStamps[localData[i].properties.timestamp] = 1;
+      }
+    };
+
+    // Add the timestamp counts to the chart data list
+    for(var val in timeStamps) 
+    { 
+      chartData.push(timeStamps[val]); 
+    }
+
+    // Draw the chart using the counts
+    var x = d3.scale.linear()
+        .domain([0, d3.max(chartData)])
+        .range([0, 420]);
+
+    chart = d3.select(".chart")
+      .selectAll("div")
+        .data(chartData)
+      .enter().append("div")
+        .style("width", function(d) { return x(d) + "px"; })
+        .attr("class", "value")
+        .text(function(d) { return d; });
+
+    // labels are annoying
+    /*chart.selectAll("text.name")
+      .data(names)
+      .enter().append("text")
+      .attr("x", 0)
+      .attr("y", function(d){ return y(d) + y.rangeBand()/2; } )
+      .attr("text-anchor", "middle")
+      .attr("class", "name")
+      .text(String);*/
+
+    </script>
+    <p>This is a list of all timestamps found (limit 200):</p>
+    <ul>
+    <% for (var i = 0; i < data.length; i++)  {%>
+      <li><%= data[i].properties.timestamp %></li>
+    <% } %>
+  </body>
+</html>

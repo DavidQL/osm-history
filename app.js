@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
 var users = require('./routes/user');
+var d3 = require('./routes/d3');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.all('*', function(request, response, next) {
 
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);
+app.get('/d3/:username', d3.d3);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
