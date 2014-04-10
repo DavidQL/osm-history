@@ -11,13 +11,16 @@ db = {
 	connection: connection,
 	schemas: {
 		node: node_schema
-	}
+	},
+	currentDb: 'denver_boulder',
+	allDbs: ['denver_boulder', 'haiti', 'nepal', 'philippines']
 };
 
 db.switchDbs = function(req, res) {
   mongoose.disconnect(function() {
     mongoose.connect('mongodb://epic-analytics.cs.colorado.edu:27018/' + req.params.db_name);
-    res.send('ok');
+    db.currentDb = req.params.db_name;
+    res.redirect('/');
   });
 };
 

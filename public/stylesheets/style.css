@@ -2,11 +2,11 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 header {
-	padding:10px;
-	background:lightgray;
+  padding: 10px;
+  background: lightgray;
 }
 #main {
-	padding:20px;
+  padding: 20px;
 }
 a {
   color: #00B7FF;

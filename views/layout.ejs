@@ -3,16 +3,27 @@
   <head>
     <title>OSM History</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/lodash.js"></script>
+    <script src="/javascripts/main.js"></script>
   </head>
   <body>
     <header>
       OSM History Viewer
+
+      <span class="currentDb">Current DB: <%= currentDb %></span>
+      <span class="chooseDb">
+        Choose a new DB:
+        <select>
+          <% allDbs.forEach(function(db) { %>
+            <option value="<%= db %>"><%= db %></option>
+          <% }) %>
+        </select>
+      </span>
     </header>
     <section id="main">
       <%-body -%>
     </section>
-
-    <script src="/javascripts/jquery.js"></script>
-    <script src="/javascripts/main.js"></script>
   </body>
 </html>
