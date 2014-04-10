@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    
-    <style>
-      .chart div {
-        font: 10px sans-serif;
-        background-color: steelblue;
-        text-align: right;
-        padding: 3px;
-        margin: 1px;
-        color: white;
-      }
-      .chart text.value {
-        fill: white;
-      }
- 
-      .chart text.name {
-        fill: #000;
-      }
-    </style>
-
-  </head>
-  <body>
+<% layout('layout') -%>
     <h1><%= title %></h1>
     <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp</p>
-    <div class="chart"></div>
+    <svg class="chart"></svg>
 
     <script>
     var chartData = [];
     var timeStamps = {};
-    var names = ['a', 'b', 'c', 'd', 'e', 'f'];
 
     // Extract the backend Express data (all nodes stored in the variable name 'data')
     var localData = <%- JSON.stringify(data) %>;
@@ -49,40 +22,51 @@
       }
     };
 
+    chartData = [];
+
     // Add the timestamp counts to the chart data list
     for(var val in timeStamps) 
     { 
-      chartData.push(timeStamps[val]); 
-    }
+      chartData.push({value: timeStamps[val], stamp: val}); 
+    };
 
-    // Draw the chart using the counts
+    var width = 420+100,
+        barHeight = 25;
+
     var x = d3.scale.linear()
-        .domain([0, d3.max(chartData)])
-        .range([0, 420]);
+        .domain([0, d3.max(chartData, function(d) { return +d.value; })])
+        .range([0, width-100]);
 
-    chart = d3.select(".chart")
-      .selectAll("div")
+    var chart = d3.select(".chart")
+        .attr("width", width)
+        .attr("height", barHeight * chartData.length);
+
+    var bar = chart.selectAll("g")
         .data(chartData)
-      .enter().append("div")
-        .style("width", function(d) { return x(d) + "px"; })
-        .attr("class", "value")
-        .text(function(d) { return d; });
+      .enter().append("g")
+        .attr("transform", function(d, i) { return "translate(100," + i * barHeight + ")"; });
 
-    // labels are annoying
-    /*chart.selectAll("text.name")
-      .data(names)
-      .enter().append("text")
-      .attr("x", 0)
-      .attr("y", function(d){ return y(d) + y.rangeBand()/2; } )
-      .attr("text-anchor", "middle")
-      .attr("class", "name")
-      .text(String);*/
+    bar.append("rect")
+        .attr("width", function(d) { return x(+d.value); })
+        .attr("height", barHeight - 1);
+
+    bar.append("text")
+        .attr("x", function(d) { return x(d.value) - 3; })
+        .attr("y", barHeight / 2)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.value; });
+
+    bar.append("text")
+        .attr("class", "label")
+        .attr("x", -50)
+        .attr("y", barHeight/2+4)
+        .text(function(d) { return d.stamp; });
 
     </script>
+
     <p>This is a list of all timestamps found (limit 200):</p>
     <ul>
     <% for (var i = 0; i < data.length; i++)  {%>
       <li><%= data[i].properties.timestamp %></li>
     <% } %>
-  </body>
-</html>
+

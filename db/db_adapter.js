@@ -20,7 +20,7 @@ db.switchDbs = function(req, res) {
   mongoose.disconnect(function() {
     mongoose.connect('mongodb://epic-analytics.cs.colorado.edu:27018/' + req.params.db_name);
     db.currentDb = req.params.db_name;
-    res.redirect('/');
+    res.redirect(req.get('referer'));
   });
 };
 
