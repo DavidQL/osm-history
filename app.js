@@ -9,10 +9,12 @@ var routes = require('./routes');
 var users = require('./routes/user');
 var d3 = require('./routes/d3');
 var nodes = require('./routes/nodes');
+var engine = require('ejs-locals');
 
 var app = express();
 
 // view engine setup
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
