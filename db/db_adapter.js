@@ -14,6 +14,13 @@ db = {
 	}
 };
 
+db.switchDbs = function(req, res) {
+  mongoose.disconnect(function() {
+    mongoose.connect('mongodb://epic-analytics.cs.colorado.edu:27018/' + req.params.db_name);
+    res.send('ok');
+  });
+};
+
 db.Node = db.mongoose.model('Node', db.mongoose.Schema(db.schemas.node));
 
 db.connection.on('error', console.error.bind(console, 'connection error:'));
