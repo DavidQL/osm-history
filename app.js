@@ -18,23 +18,20 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// other setup
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
 // database
-var db = require('./db/db_adapter');
+var db = require('./db/db_adapter')(app);
 db.connection.once('open', function callback () {});
-
-app.all('*', function(request, response, next) {
-  request.db = db;
-  next();
-});
 
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);
