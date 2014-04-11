@@ -31,7 +31,6 @@ app.use(app.router);
 
 // database
 var db = require('./db/db_adapter')(app);
-db.connection.once('open', function callback () {});
 
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);

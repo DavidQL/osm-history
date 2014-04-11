@@ -1,15 +1,16 @@
+var _ = require('underscore');
 var mongoose = require('mongoose');
 var node_schema = require('./node_schema');
 var config = require('./config');
-var connection, db;
+var connections = {}, db;
 
-mongoose.connect(config.db.url + '/' + config.db.defaultDbName);
-
-connection = mongoose.connection;
+_.each(config.db.allDbs, function(dbName) {
+  connections[dbName] = mongoose.createConnection(config.db.url + '/' + dbName)
+});
 
 db = {
 	mongoose: mongoose,
-	connection: connection,
+	connections: connections,
 	schemas: {
 		node: node_schema
 	},
@@ -17,25 +18,23 @@ db = {
 };
 
 db.switchDbs = function(req, res) {
-  mongoose.disconnect(function() {
-    mongoose.connect(config.db.url + '/' + req.params.db_name);
-    req.session.currentDb = req.params.db_name;
-    res.redirect(req.get('referer'));
-  });
+  req.session.currentDb = req.params.db_name;
+  res.redirect(req.get('referer'));
 };
 
-db.Node = db.mongoose.model('Node', db.mongoose.Schema(db.schemas.node));
-
-db.connection.on('error', console.error.bind(console, 'connection error:'));
+_.each(config.db.allDbs, function(dbName) {
+  connections[dbName].Node = connections[dbName].model('Node', db.mongoose.Schema(db.schemas.node));
+});
 
 module.exports = function(app) {
 	app.all('*', function(request, response, next) {
 	  // initial setup
-	  request.db = db;
-	  request.db.defaultDbName = config.db.defaultDbName;
+    request.db = connections[request.session.currentDb || config.db.defaultDbName];
+    request.db.defaultDbName = config.db.defaultDbName;
+
 	  response.config = {
 	  	currentDb: request.session.currentDb || request.db.defaultDbName,
-	  	allDbs: request.db.allDbs
+	  	allDbs: config.db.allDbs
 	  };
 	  next();
 	});
