@@ -6,25 +6,15 @@ var connections = {}, db;
 
 _.each(config.db.allDbs, function(dbName) {
   connections[dbName] = mongoose.createConnection(config.db.url + '/' + dbName)
+  connections[dbName].Node = connections[dbName].model('Node', mongoose.Schema(node_schema));
 });
 
 db = {
-	mongoose: mongoose,
-	connections: connections,
-	schemas: {
-		node: node_schema
-	},
-	allDbs: config.db.allDbs
+	switchDbs: function(req, res) {
+    req.session.currentDb = req.params.db_name;
+    res.redirect(req.get('referer'));   
+  }
 };
-
-db.switchDbs = function(req, res) {
-  req.session.currentDb = req.params.db_name;
-  res.redirect(req.get('referer'));
-};
-
-_.each(config.db.allDbs, function(dbName) {
-  connections[dbName].Node = connections[dbName].model('Node', db.mongoose.Schema(db.schemas.node));
-});
 
 module.exports = function(app) {
 	app.all('*', function(request, response, next) {
