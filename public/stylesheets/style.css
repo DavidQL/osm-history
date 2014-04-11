@@ -10,6 +10,11 @@ header span.currentDb {
   padding: 5px;
   margin: 0 10px;
 }
+header a {
+  text-decoration: none;
+  color: darkblue;
+  border-bottom: 1px dashed darkblue;
+}
 #main {
   padding: 20px;
 }
