@@ -36,7 +36,7 @@ var db = require('./db/db_adapter')(app);
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);
 app.get('/d3/:username', d3.d3);
-app.get('/nodes/:id/versions', nodes.versions);
+app.get('/nodes', nodes.index);
 app.get('/map', map.index);
 app.get('/switch-to/:db_name', db.switchDbs);
 
