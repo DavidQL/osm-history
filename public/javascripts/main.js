@@ -16,14 +16,23 @@ var osm = {
 		}).addTo(map);
 
 		$.get('/nodes?lat=' + lat + '&lon=' + lon).done(function(results) {
+			var markers = new L.MarkerClusterGroup();
+
 			_.each(results, function(point, i) {
-				L.marker([point.obj.properties.lat, point.obj.properties.lon], {
+				markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
 					icon: L.icon({
 						iconUrl: '/images/marker-icon.png',
 					    shadowUrl: '/images/marker-shadow.png'
 					})
-				}).addTo(map);
+				}));
+				// L.marker([point.obj.properties.lat, point.obj.properties.lon], {
+				// 	icon: L.icon({
+				// 		iconUrl: '/images/marker-icon.png',
+				// 	    shadowUrl: '/images/marker-shadow.png'
+				// 	})
+				// }).addTo(map);
 			});
+			map.addLayer(markers);
 		});
 	}
 };
