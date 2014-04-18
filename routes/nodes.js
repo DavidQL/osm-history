@@ -8,7 +8,7 @@ exports.index = function(req, res) {
 	};
 
 	if (lat && lon) {
-		req.db.Node.geoNear(point, {maxDistance: 0.5, spherical: true, num:50000}, function(err, results, stats) {
+		req.db.Node.geoNear(point, {maxDistance: 0.5, spherical: true, num:5000, lean: true}, function(err, results, stats) {
 			console.log(stats)
 			res.send(results);
 		});	
@@ -23,5 +23,14 @@ exports.index = function(req, res) {
 };
 
 exports.metadata = function(req, res) {
-	var nodes = req.db.Node.find().sort()
+	var nodes = req.db.Node.find().sort({'properties.timestamp': 1}).limit(1).exec(function(err, results) {
+		var earliest_date = results[0].properties.timestamp;
+		req.db.Node.find().sort({'properties.timestamp': -1}).limit(1).exec(function(err, results) {
+			var latest_date = results[0].properties.timestamp;
+			res.send({
+				earliest: earliest_date,
+				latest: latest_date
+			});
+		});
+	});
 }
