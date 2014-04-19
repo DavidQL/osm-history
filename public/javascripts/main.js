@@ -9,7 +9,9 @@ var osm = {
 			var lat = $('#map').data('lat');
 			var lon = $('#map').data('lon');
 			var map = osm.map.createNewMap();
+			osm.map.toggleLoader("Fetching date distribution");
 			this.fetchMetaData(lat, lon, map).done(function() {
+				osm.map.toggleLoader();
 				// if date in URL, fetch that immediately
 				if (osm.map.getURLParameter('date')) {
 					(function() {
@@ -36,12 +38,9 @@ var osm = {
 		fetchMetaData: function(lat, lon, map) {
 			return $.get('/nodes/metadata', function(result) {
 				var firstDay = moment(result.earliest);
-				var lastDay = moment(result.latest);
-				var cursorDay = moment(result.earliest);
-				var monthsCount = lastDay.diff(firstDay, 'months');
 
 				$('#calendar').datepicker({
-					numberOfMonths: 3,
+					numberOfMonths: 2,
 					defaultDate: firstDay.toDate(),
 					onSelect: function(dateText, inst) {
 						var date = moment(dateText).valueOf();
@@ -62,13 +61,16 @@ var osm = {
 		},
 		fetchNodes: function(lat, lon, map, date) { // date optional
 			date || (date = osm.map.getURLParameter('date'));
+			osm.map.toggleLoader('Fetching nodes')
 			$.get('/nodes?lat=' + lat + '&lon=' + lon + (date ? '&date=' + date : '')).done(function(results) {
 				var map, markers;
 				
+				osm.map.toggleLoader();
 				osm.map.resetMap();
 				map = osm.map.createNewMap();
 
-				$('.results-count').text(results.length);
+				osm.map.printMetadata(results.length, date);
+				
 				markers = new L.MarkerClusterGroup();
 
 				_.each(results, function(point, i) {
@@ -82,6 +84,20 @@ var osm = {
 				map.addLayer(markers);
 			});
 		},
+		printMetadata: function(count, date) {
+			$('.results-count').show();
+			$('.results-count .count').text(count);
+			if (date) {
+				$('.results-count .date').text(' for ' + moment(date).format("dddd, MMMM Do YYYY"));
+			}
+		},
+		toggleLoader: function(message) {
+			if (message) {
+				$('.loader').show().find('span').text(message);
+				return;
+			}
+			$('.loader').hide();
+		}
 	}
 };
 

@@ -1,7 +1,14 @@
 <!-- layout file includes stylesheets and external js libraries -->
 <% layout('layout') -%>
 
-<div class="results-count"></div>
- <div id="map" data-lat="<%= lat %>" data-lon="<%= lon %>"></div>
+<div class="results-count">
+	<span class="count"></span> results found <span class="date"></span>
+</div>
+<div id="map" data-lat="<%= lat %>" data-lon="<%= lon %>"></div>
 
 <div id="calendar"></div>
+
+<div class="loader">
+	<span>Loading</span>
+	<img src="/images/ajax-loader.gif"/>
+</div>
