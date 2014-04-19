@@ -1,13 +1,38 @@
+var moment = require('moment');
+var _ = require('underscore');
+
 exports.index = function(req, res) {
 	var lat = req.query.lat;
 	var lon = req.query.lon;
 	var username = req.query.username;
+	var date = req.query.date && parseInt(req.query.date, 10);
 	var point = {
 		type: "Point", 
 		coordinates: [Number(lon), Number(lat)]
 	};
 
 	if (lat && lon) {
+		if (date) {
+
+			return req.db.Node.geoNear(point, {
+				maxDistance: 0.5, spherical: true, num:5000, lean: true, 
+				query: {
+					"properties.timestamp": {
+						"$gte": moment(date).valueOf(), 
+						"$lt": moment(date).endOf('day').valueOf()
+					}						
+				}
+
+			}, function(err, results, stats) {
+				console.log('date stats', stats)
+				res.send(results.map(function(item) {
+					console.log(_.keys(item), item.properties);
+					return moment(item.obj.properties.timestamp).format();
+				}));
+			});
+
+		}
+
 		req.db.Node.geoNear(point, {maxDistance: 0.5, spherical: true, num:5000, lean: true}, function(err, results, stats) {
 			console.log(stats)
 			res.send(results);
