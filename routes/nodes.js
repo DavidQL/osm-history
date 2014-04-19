@@ -13,7 +13,6 @@ exports.index = function(req, res) {
 
 	if (lat && lon) {
 		if (date) {
-
 			return req.db.Node.geoNear(point, {
 				maxDistance: 0.5, spherical: true, num:5000, lean: true, 
 				query: {
@@ -25,10 +24,7 @@ exports.index = function(req, res) {
 
 			}, function(err, results, stats) {
 				console.log('date stats', stats)
-				res.send(results.map(function(item) {
-					console.log(_.keys(item), item.properties);
-					return moment(item.obj.properties.timestamp).format();
-				}));
+				res.send(results);
 			});
 
 		}
