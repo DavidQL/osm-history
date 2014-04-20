@@ -30,6 +30,16 @@ var osm = {
 				osm.map.printMetadata(osm.map.results.length, date);
 				osm.map.layMarkers(osm.map.results, map);
 			});
+
+			$('.playback-options p a').on('click', function(e) {
+				$('.playback-options').fadeOut(500);
+				if (osm.map.center) {
+					osm.map.fetchNodes(osm.map.center[0], osm.map.center[1], map, date, osm.map.zoom);
+				} else {
+					osm.map.fetchNodes(lat, lon, map, date, osm.map.zoom);
+				}
+				
+			});
 		},
 		createNewMap: function() {
 			var lat = $('#map').data('lat');
@@ -58,9 +68,11 @@ var osm = {
 			$map.clone().empty().insertAfter('#map');
 			$map.remove();
 		},
-		fetchNodes: function(lat, lon, map, date) {
+		fetchNodes: function(lat, lon, map, date, zoom) {
 			osm.map.toggleLoader('Fetching nodes')
-			$.get('/nodes?lat=' + lat + '&lon=' + lon + (date ? '&date=' + date : '')).done(function(results) {
+			var url = '/nodes?lat=' + lat + '&lon=' + lon + '&date=' + date;
+			zoom && (url += '&zoom=' + zoom);
+			$.get(url).done(function(results) {
 				var map;
 				
 				osm.map.toggleLoader();

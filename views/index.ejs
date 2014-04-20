@@ -1,21 +1,34 @@
 <% layout('layout') -%>
-Welcome to OSM History viewer
+
+<h3>Welcome to OSM History viewer</h3>
 
 <br/>
 <br/>
-Prototypes:
+
+Features:
 
 <ul>
 	<li>
-		<a href="/d3/woodpeck_fixbot">See</a> a visualization of nodes per timestamp by user woodpeck_fixbot (use Denver/Boulder DB). 
+		Replay a day of node additions in a city
+		<ul>
+			<li>
+				<a href="/map?lat=18.5333&lon=-72.3333&date=1263366000000">See</a> 
+				Haiti nodes the day after the 2010 Haiti earthquake struck (1/13/2010). Make sure the haiti database is selected at the top of the screen. 
+			</li>
+			<li>
+				<a href="/map?lat=40.0176&lon=-105.2797&date=1354431600000">See</a> 
+				Boulder nodes on December 2, 2013. Make sure you have the denver_boulder database selected at the top of the screen.
+			</li>
+		</ul>
 	</li>
 	<li>
-		<a href="/users/woodpeck_fixbot/nodes">See</a> all nodes by user woodpeck_fixbot (use Denver/Boulder DB). 
+		Charts/Visualizations:
+		<ul>
+			<li>
+				<a href="/d3/woodpeck_fixbot">See</a> 
+				a visualization of nodes per timestamp by user woodpeck_fixbot. Make sure you have the denver_boulder database selected at the top of the screen..
+			</li>
+		</ul>
 	</li>
-	<li>
-		<a href="/map?lat=40.0176&lon=-105.2797&date=1354431600000">See</a> Boulder nodes on 12/2/2013 (use Denver/Boulder DB). 
-	</li>
-	<li>
-		<a href="/map?lat=18.5333&lon=-72.3333&date=1263366000000">See</a> Haiti nodes on 1/13/2010 (use Haiti DB). 
-	</li>
+
 </ul>

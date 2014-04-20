@@ -6,6 +6,7 @@ exports.index = function(req, res) {
 	var lon = req.query.lon;
 	var username = req.query.username;
 	var date = req.query.date && parseInt(req.query.date, 10);
+	var maxDistance = req.query.zoom && ((360/(Math.pow(2,req.query.zoom)))*Math.PI)/180;
 	var point = {
 		type: "Point", 
 		coordinates: [Number(lon), Number(lat)]
@@ -14,7 +15,7 @@ exports.index = function(req, res) {
 	if (lat && lon) {
 		if (date) {
 			return req.db.Node.geoNear(point, {
-				maxDistance: 0.00056222641, spherical: true, num:5000, lean: true, 
+				maxDistance: maxDistance || 0.00056222641, spherical: true, num:5000, lean: true, 
 				query: {
 					"properties.timestamp": {
 						"$gte": moment(date).valueOf(), 
