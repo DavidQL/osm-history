@@ -121,9 +121,9 @@ var osm = {
 		},
 		printMetadata: function(count, date) {
 			$('.results-count').show();
-			$('.results-count .count').text(count);
+			$('.results-count .count').text(count === 5000 ? '> 5000' : count);
 			if (date) {
-				$('.results-count .date').text(' for ' + moment(date).format("dddd, MMMM Do YYYY"));
+				$('.results-count .date').text(moment(date).format("dddd, MMMM Do YYYY"));
 			}
 		},
 		toggleLoader: function(message) {
