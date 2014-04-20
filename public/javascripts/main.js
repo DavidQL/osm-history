@@ -9,45 +9,52 @@ var osm = {
 			var lat = $('#map').data('lat');
 			var lon = $('#map').data('lon');
 			var map = osm.map.createNewMap();
-			osm.map.toggleLoader("Fetching date distribution");
-			this.fetchMetaData(lat, lon, map).done(function() {
-				osm.map.toggleLoader();
-				// if date in URL, fetch that immediately
-				if (osm.map.getURLParameter('date')) {
-					(function() {
-						var date = Number(osm.map.getURLParameter('date'));
-						osm.map.fetchNodes(lat, lon, map, date);
-						$('#calendar').datepicker("setDate", moment(date).toDate());
-					})();
+			var date = Number(osm.map.getURLParameter('date'));
+			
+			osm.map.fetchNodes(lat, lon, map, date);
+
+			$('#calendar').datepicker({
+				numberOfMonths: 1,
+				defaultDate: moment(date).toDate(),
+				onSelect: function(dateText, inst) {
+					var date = moment(dateText).valueOf();
+					window.location.href = "?lat="+lat+"&lon="+lon+"&date=" + date;
+					// osm.map.fetchNodes(lat, lon, map, date);
 				}
+			});
+
+			$('.playback-options button').on('click', function() {
+				$('.playback-options').fadeOut(500);
+				osm.map.resetMap();
+				var map = osm.map.createNewMap();
+				osm.map.printMetadata(osm.map.results.length, date);
+				osm.map.layMarkers(osm.map.results, map);
+			});
+			$('.playback-options a').on('click', function() {
+				$('.playback-options').fadeOut(500);
 			});
 		},
 		createNewMap: function() {
-			var lat = $('#map').data('lat');
+			var lat = $('#map').data('lat'); // or stored lat lon
 			var lon = $('#map').data('lon');
+
 			var map = L.map('map', {
 				markerZoomAnimation: false
-			}).setView([lat, lon], 12);
+			}).setView(osm.map.center || [lat, lon], osm.map.zoom || 12); // or stored zoom level
+
+			var updateMapData = function(e) {
+				osm.map.center = [map.getCenter().lat, map.getCenter().lng];
+				osm.map.zoom = map.getZoom();
+			};
 
 			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 			    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(map);
+
+			map.on('viewreset', updateMapData);
+			map.on('moveend', updateMapData);
+
 			return map;
-		},
-
-		fetchMetaData: function(lat, lon, map) {
-			return $.get('/nodes/metadata', function(result) {
-				var firstDay = moment(result.earliest);
-
-				$('#calendar').datepicker({
-					numberOfMonths: 2,
-					defaultDate: firstDay.toDate(),
-					onSelect: function(dateText, inst) {
-						var date = moment(dateText).valueOf();
-						osm.map.fetchNodes(lat, lon, map, date);
-					}
-				});
-			});
 		},
 		getURLParameter: function(name) {
 		    return decodeURI(
@@ -77,7 +84,7 @@ var osm = {
 		},
 		layMarkers: function(results, map) {
 			var markers = new L.MarkerClusterGroup();
-
+			osm.map.results = results;
 			results = _.sortBy(results, function(point) {
 				return point.obj.properties.timestamp;
 			});
@@ -90,13 +97,14 @@ var osm = {
 
 					if (i >= results.length) {
 						clearInterval(myInterval);
+						$('.playback-options').fadeIn(500);
 						return;
 					}
 
 					var point = results[i];
 
 					// every 100th, update the time display
-					if (i % 100 === 0 || ((results.length - i) < 100)) {
+					if (i % 10 === 0 || ((results.length - i) < 10)) {
 						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm a"))
 					}
 					

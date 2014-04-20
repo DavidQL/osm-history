@@ -17,6 +17,15 @@ header {
 }
 #main {
 	padding: 20px;
+	position:relative;
+}
+.time {
+	position: absolute;
+	right: 20px;
+	z-index: 10;
+	background: rgba(255,255,255,0.8);
+	padding: 10px;
+	font-size: 30px;
 }
 a {
   color: #00B7FF;
@@ -25,13 +34,51 @@ a {
 #map { 
 	height: 300px; 
 }
-
-#calendar {
-	width:100%;
-	height:auto;
-	.results-count {
-		display:none;
+.results-count {
+	display:none;
+	position: absolute;
+	left: 27px;
+	z-index: 10;
+	background: rgba(255,255,255,0.8);
+	padding: 10px;
+	font-size: 12px;
+	top: 277px;
+}
+.playback-options {
+	display:none;
+	position: absolute;
+	right: 20px;
+	z-index: 10000;
+	 background: rgba(0,0,0,0.7); 
+	padding: 10px;
+	top: 76px;
+	width: 140px;
+	height:36px;
+	button {
+		display: block;
+		clear: both;
+		margin: 0 auto;
+		background: white;
+		border: none;
+		padding: 10px;
+		margin-bottom: 20px;
+		cursor: pointer;
+		border-radius: 5px;
 	}
+	p {
+		text-align: center;
+		color: white;
+		a {
+			color:white;
+		}
+	}
+}
+#calendar {
+	width: 266px;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+	margin-top: 20px;
 }
 
 .loader {
