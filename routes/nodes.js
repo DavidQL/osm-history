@@ -28,11 +28,6 @@ exports.index = function(req, res) {
 			});
 
 		}
-
-		req.db.Node.geoNear(point, {maxDistance: 0.5, spherical: true, num:5000, lean: true}, function(err, results, stats) {
-			console.log(stats)
-			res.send(results);
-		});	
 	}
 
 	if (username) {

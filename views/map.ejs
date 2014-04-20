@@ -1,21 +1,23 @@
 <!-- layout file includes stylesheets and external js libraries -->
 <% layout('layout') -%>
 
-<div class="results-count">
-	<span class="count"></span> nodes created on <span class="date"></span>
-</div>
-<div class="time">
+<div id="map-container">
+	<div class="results-count">
+		<span class="count"></span> nodes created on <span class="date"></span>
+	</div>
+	<div class="time">
 
-</div>
-<div id="map" data-lat="<%= lat %>" data-lon="<%= lon %>"></div>
+	</div>
+	<div id="map" data-lat="<%= lat %>" data-lon="<%= lon %>" data-date="<%= date %>"></div>
 
-<div class="playback-options">
-	<button class="replay">Replay</button> 
-</div>
+	<div class="playback-options">
+		<button class="replay">Replay</button> 
+	</div>
 
-<div id="calendar"></div>
+	<div id="calendar"></div>
 
-<div class="loader">
-	<span>Loading</span>
-	<img src="/images/ajax-loader.gif"/>
+	<div class="loader">
+		<span>Loading</span>
+		<img src="/images/ajax-loader.gif"/>
+	</div>
 </div>

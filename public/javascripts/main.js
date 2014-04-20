@@ -9,7 +9,7 @@ var osm = {
 			var lat = $('#map').data('lat');
 			var lon = $('#map').data('lon');
 			var map = osm.map.createNewMap();
-			var date = Number(osm.map.getURLParameter('date'));
+			var date = $('#map').data('date');
 			
 			osm.map.fetchNodes(lat, lon, map, date);
 
@@ -19,28 +19,25 @@ var osm = {
 				onSelect: function(dateText, inst) {
 					var date = moment(dateText).valueOf();
 					window.location.href = "?lat="+lat+"&lon="+lon+"&date=" + date;
-					// osm.map.fetchNodes(lat, lon, map, date);
 				}
 			});
 
 			$('.playback-options button').on('click', function() {
+				var map;
 				$('.playback-options').fadeOut(500);
 				osm.map.resetMap();
-				var map = osm.map.createNewMap();
+				map = osm.map.createNewMap();
 				osm.map.printMetadata(osm.map.results.length, date);
 				osm.map.layMarkers(osm.map.results, map);
 			});
-			$('.playback-options a').on('click', function() {
-				$('.playback-options').fadeOut(500);
-			});
 		},
 		createNewMap: function() {
-			var lat = $('#map').data('lat'); // or stored lat lon
+			var lat = $('#map').data('lat');
 			var lon = $('#map').data('lon');
 
 			var map = L.map('map', {
 				markerZoomAnimation: false
-			}).setView(osm.map.center || [lat, lon], osm.map.zoom || 12); // or stored zoom level
+			}).setView(osm.map.center || [lat, lon], osm.map.zoom || 12);
 
 			var updateMapData = function(e) {
 				osm.map.center = [map.getCenter().lat, map.getCenter().lng];
@@ -56,18 +53,12 @@ var osm = {
 
 			return map;
 		},
-		getURLParameter: function(name) {
-		    return decodeURI(
-		        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-		    );
-		},
 		resetMap: function() {
 			var $map = $('#map');
 			$map.clone().empty().insertAfter('#map');
 			$map.remove();
 		},
-		fetchNodes: function(lat, lon, map, date) { // date optional
-			date || (date = osm.map.getURLParameter('date'));
+		fetchNodes: function(lat, lon, map, date) {
 			osm.map.toggleLoader('Fetching nodes')
 			$.get('/nodes?lat=' + lat + '&lon=' + lon + (date ? '&date=' + date : '')).done(function(results) {
 				var map;
@@ -93,15 +84,16 @@ var osm = {
 
 			(function() {
 				var i = 0;
-				var myInterval = setInterval(function() {
+				var markerInterval = setInterval(function() {
+					var point;
 
 					if (i >= results.length) {
-						clearInterval(myInterval);
+						clearInterval(markerInterval);
 						$('.playback-options').fadeIn(500);
 						return;
 					}
 
-					var point = results[i];
+					point = results[i];
 
 					// every 100th, update the time display
 					if (i % 10 === 0 || ((results.length - i) < 10)) {
@@ -122,9 +114,7 @@ var osm = {
 		printMetadata: function(count, date) {
 			$('.results-count').show();
 			$('.results-count .count').text(count === 5000 ? '> 5000' : count);
-			if (date) {
-				$('.results-count .date').text(moment(date).format("dddd, MMMM Do YYYY"));
-			}
+			$('.results-count .date').text(moment(date).format("dddd, MMMM Do YYYY"));
 		},
 		toggleLoader: function(message) {
 			if (message) {

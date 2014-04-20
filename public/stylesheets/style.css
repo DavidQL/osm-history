@@ -19,7 +19,7 @@ header a {
   padding: 20px;
   position: relative;
 }
-.time {
+#map-container .time {
   position: absolute;
   right: 20px;
   z-index: 10;
@@ -27,13 +27,10 @@ header a {
   padding: 10px;
   font-size: 30px;
 }
-a {
-  color: #00B7FF;
-}
-#map {
+#map-container #map {
   height: 300px;
 }
-.results-count {
+#map-container .results-count {
   display: none;
   position: absolute;
   left: 27px;
@@ -43,7 +40,7 @@ a {
   font-size: 12px;
   top: 277px;
 }
-.playback-options {
+#map-container .playback-options {
   display: none;
   position: absolute;
   right: 20px;
@@ -54,7 +51,7 @@ a {
   width: 140px;
   height: 36px;
 }
-.playback-options button {
+#map-container .playback-options button {
   display: block;
   clear: both;
   margin: 0 auto;
@@ -65,21 +62,21 @@ a {
   cursor: pointer;
   border-radius: 5px;
 }
-.playback-options p {
+#map-container .playback-options p {
   text-align: center;
   color: white;
 }
-.playback-options p a {
+#map-container .playback-options p a {
   color: white;
 }
-#calendar {
+#map-container #calendar {
   width: 266px;
   height: auto;
   margin: 0 auto;
   display: block;
   margin-top: 20px;
 }
-.loader {
+#map-container .loader {
   display: none;
   position: fixed;
   left: 0;
@@ -89,7 +86,7 @@ a {
   background: rgba(0, 0, 0, 0.7);
   z-index: 2000;
 }
-.loader span {
+#map-container .loader span {
   color: white;
   width: 100%;
   text-align: center;
@@ -98,7 +95,7 @@ a {
   position: relative;
   font-size: 30px;
 }
-.loader img {
+#map-container .loader img {
   position: relative;
   margin-left: 50%;
   right: 16px;
