@@ -27,7 +27,7 @@ var osm = {
 			var lon = $('#map').data('lon');
 			var map = L.map('map', {
 				markerZoomAnimation: false
-			}).setView([lat, lon], 6);
+			}).setView([lat, lon], 12);
 
 			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 			    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -63,26 +63,53 @@ var osm = {
 			date || (date = osm.map.getURLParameter('date'));
 			osm.map.toggleLoader('Fetching nodes')
 			$.get('/nodes?lat=' + lat + '&lon=' + lon + (date ? '&date=' + date : '')).done(function(results) {
-				var map, markers;
+				var map;
 				
 				osm.map.toggleLoader();
 				osm.map.resetMap();
+
 				map = osm.map.createNewMap();
 
 				osm.map.printMetadata(results.length, date);
 				
-				markers = new L.MarkerClusterGroup();
+				osm.map.layMarkers(results, map);
+			});
+		},
+		layMarkers: function(results, map) {
+			var markers = new L.MarkerClusterGroup();
 
-				_.each(results, function(point, i) {
+			results = _.sortBy(results, function(point) {
+				return point.obj.properties.timestamp;
+			});
+
+			map.addLayer(markers);
+
+			(function() {
+				var i = 0;
+				var myInterval = setInterval(function() {
+
+					if (i >= results.length) {
+						clearInterval(myInterval);
+						return;
+					}
+
+					var point = results[i];
+
+					// every 100th, update the time display
+					if (i % 100 === 0 || ((results.length - i) < 100)) {
+						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm a"))
+					}
+					
 					markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
 						icon: L.icon({
 							iconUrl: '/images/marker-icon.png',
 						    shadowUrl: '/images/marker-shadow.png'
 						})
 					}));
-				});
-				map.addLayer(markers);
-			});
+
+					i = i + 1;
+				}, 10);
+			})();
 		},
 		printMetadata: function(count, date) {
 			$('.results-count').show();

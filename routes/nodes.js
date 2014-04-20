@@ -14,7 +14,7 @@ exports.index = function(req, res) {
 	if (lat && lon) {
 		if (date) {
 			return req.db.Node.geoNear(point, {
-				maxDistance: 0.5, spherical: true, num:5000, lean: true, 
+				maxDistance: 0.00056222641, spherical: true, num:5000, lean: true, 
 				query: {
 					"properties.timestamp": {
 						"$gte": moment(date).valueOf(), 
