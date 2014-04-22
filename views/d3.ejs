@@ -4,6 +4,7 @@
 <script src="/javascripts/bargraph.js"></script>
 <h1><%= title %></h1>
 <br>
+
 <div name="chart1" style="float:left">
   <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp (limit 200)</p>
   <svg class="chart" id="chart1"></svg>
@@ -14,20 +15,41 @@
 </div>
 
 <script>
+$(document).ready(function(){
+	$("#select" ).on('change', function() { 
+	  var field = $(this).val();
+	  chart("#chart1","key",field);
+	})
+});
+
 // Extract the backend Express data (all nodes stored in the variable name 'data')
 var localData = <%- JSON.stringify(data) %>;
 
-// the countProperty function counts the frequency of each value present in the desired property
-chartData = countProperty("timestamp", localData)
-sort(chartData,"key"); // sort the timestamps to appear in chronological order
-drawBarGraph(chartData, "#chart1");
+function chart(id, sort_by_key_or_value, field)
+{
+	$(id).empty();
+	// the countProperty function counts the frequency of each value present in the desired property
+	chartData = countProperty(field, localData)
+	sort(chartData,sort_by_key_or_value); // sort the timestamps to appear in chronological order
+	drawBarGraph(chartData, id);
+}
+
+chart("#chart1","key","timestamp");
 
 chartData = countField("date", localData);
-sort(chartData,"key");
+sort(chartData,"value");
 drawBarGraph(chartData, "#chart2");
 
-
 </script>
+
+Field:
+<select id="select">
+  <option value="timestamp">Timestamp</option>
+  <option value="changeset">Changeset</option>
+</select>
+<br>
+<button onClick="chart('#chart1','key','timestamp')">Sort by Key</button>
+<button onClick="chart('#chart1','value','timestamp')">Sort by Value</button>
 
 <!--<p>This is a list of all timestamps found (limit 200):</p>
 <ul>

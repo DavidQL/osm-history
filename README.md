@@ -1,7 +1,9 @@
 # OSM-History
 
 This is a Node web application to interact with OSM history data.
-Currently this doesn't do much of anything. Prototype, setup code. 
+Features:
+	* Replay a day of node additions to a city
+	* See a chart of node additions by user
 
 # Setup
 
@@ -16,7 +18,4 @@ Currently this doesn't do much of anything. Prototype, setup code.
 Make sure to run this while physically on campus or using a CU VPN, in order to connect to the database.
 
 # How To Use
-* Visit `localhost:3000` for a sample welcome message
-* Visit `localhost:3000/users/<username>/nodes` for a listing of the first 20 nodes found for `<username>`
-* Visit `localhost:3000/d3/<username/` for a demonstration of the D3 plotting library. The `<username>`'s nodes per timestamp will be plotted for the first 200 nodes found.
-  * A good example is `localhost:3000/d3/woodpeck_fixbot` since the user appears to be a bot (if you're on the denver_boulder db)
+* Click the links in the home page for demos of each feature.

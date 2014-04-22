@@ -2,7 +2,7 @@ module.exports = {
 	id: Number,
 	geometry: {
 	    type: String,
-	    coordinates: [],
+	    coordinates: [Number],
 	},
 	type: String,
 	properties: {
