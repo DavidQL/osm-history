@@ -74,7 +74,6 @@ var osm = {
 			zoom && (url += '&zoom=' + zoom);
 			$.get(url).done(function(results) {
 				var map;
-				
 				osm.map.toggleLoader();
 				osm.map.resetMap();
 
@@ -94,9 +93,9 @@ var osm = {
 
 			map.addLayer(markers);
 
-			(function() {
+			(_.bind(function() {
 				var i = 0;
-				var markerInterval = setInterval(function() {
+				var markerInterval = setInterval(_.bind(function() {
 					var point;
 
 					if (i >= results.length) {
@@ -111,6 +110,8 @@ var osm = {
 					if (i % 10 === 0 || ((results.length - i) < 10)) {
 						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm a"))
 					}
+
+					this.updateUserTotals(point);
 					
 					markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
 						icon: L.icon({
@@ -120,8 +121,23 @@ var osm = {
 					}));
 
 					i = i + 1;
-				}, 10);
-			})();
+				}, this), 10);
+			}, this))();
+		},
+		updateUserTotals: function(point) {
+			var $user = $('.users div[data-user="'+point.obj.properties.user+'"');
+			if ($user.length) {
+				$user.find('span').text($user.data('count') + 1);
+				$user.data('count', $user.data('count') + 1);
+			} else {
+				$user = $("<div/>", {
+					"data-user": point.obj.properties.user, 
+					text: point.obj.properties.user + ": "
+				});
+				$user.append($("<span/>", {text: 1}));
+				$user.data('count', 1);
+				$('.users').append($user);
+			}
 		},
 		printMetadata: function(count, date) {
 			$('.results-count').show();
