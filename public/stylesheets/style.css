@@ -76,6 +76,20 @@ header a {
   display: block;
   margin-top: 20px;
 }
+#map-container .users > div {
+  display: block;
+  width: 400px;
+  border: 1px solid gray;
+  position: relative;
+}
+#map-container .users > div span.bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #ffe4e4;
+  height: 100%;
+  z-index: -1;
+}
 #map-container .loader {
   display: none;
   position: fixed;

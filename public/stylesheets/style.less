@@ -77,6 +77,22 @@ header {
 		display: block;
 		margin-top: 20px;
 	}
+	.users {
+		> div {
+			display: block;
+			width: 400px;
+			border: 1px solid gray;
+			position: relative;
+			span.bar {
+				position: absolute;
+				left: 0;
+				top: 0;
+				background: #ffe4e4;
+				height: 100%;
+				z-index: -1;
+			}
+		}
+	}
 	.loader {
 		display:none;
 		position: fixed;

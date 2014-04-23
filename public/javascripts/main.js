@@ -86,6 +86,7 @@ var osm = {
 		},
 		layMarkers: function(results, map) {
 			var markers = new L.MarkerClusterGroup();
+			var total_results = results.length;
 			osm.map.results = results;
 			results = _.sortBy(results, function(point) {
 				return point.obj.properties.timestamp;
@@ -108,10 +109,10 @@ var osm = {
 
 					// every 100th, update the time display
 					if (i % 10 === 0 || ((results.length - i) < 10)) {
-						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm a"))
+						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm A"))
 					}
 
-					this.updateUserTotals(point);
+					this.updateUserTotals(point, total_results);
 					
 					markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
 						icon: L.icon({
@@ -124,17 +125,21 @@ var osm = {
 				}, this), 10);
 			}, this))();
 		},
-		updateUserTotals: function(point) {
+		updateUserTotals: function(point, total_results) {
 			var $user = $('.users div[data-user="'+point.obj.properties.user+'"');
+			var new_count
 			if ($user.length) {
-				$user.find('span').text($user.data('count') + 1);
-				$user.data('count', $user.data('count') + 1);
+				new_count = $user.data('count') + 1;
+				$user.find('span.count').text(new_count);
+				$user.find('span.bar').css('width', ((new_count/total_results) * 100) + "%")
+				$user.data('count', new_count);
 			} else {
 				$user = $("<div/>", {
 					"data-user": point.obj.properties.user, 
 					text: point.obj.properties.user + ": "
 				});
-				$user.append($("<span/>", {text: 1}));
+				$user.append($("<span/>", {text: 1, "class": "count"}));
+				$user.append($("<span/>", {"class": "bar"}).css('width', ((new_count/total_results) * 100) + "%"));
 				$user.data('count', 1);
 				$('.users').append($user);
 			}
