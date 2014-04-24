@@ -19,8 +19,17 @@
 
 	<div id="calendar"></div>
 	<div class="users">
-		<span>Nodes by users:</span>
 	</div>
+
+	<script type="text/ejs" id="userTemplate">
+		<div data-user="{{ name }}" data-count="{{ count }}">
+			{{ name }}
+			<span class="count">{{count}}</span>
+			<span class="bar"></span>
+		</div>
+	</script>
+
+
 	<div class="loader">
 		<span>Loading</span>
 		<img src="/images/ajax-loader.gif"/>

@@ -22,6 +22,7 @@ var osm = {
 				}
 			});
 
+			// on replay
 			$('.playback-options button').on('click', function() {
 				var map;
 				$('.playback-options').fadeOut(500);
@@ -31,6 +32,7 @@ var osm = {
 				osm.map.layMarkers(osm.map.results, map);
 			});
 
+			// on re-fetch
 			$('.playback-options p a').on('click', function(e) {
 				$('.playback-options').fadeOut(500);
 				if (osm.map.center) {
@@ -67,6 +69,7 @@ var osm = {
 			var $map = $('#map');
 			$map.clone().empty().insertAfter('#map');
 			$map.remove();
+			$('.users').empty();
 		},
 		fetchNodes: function(lat, lon, map, date, zoom) {
 			osm.map.toggleLoader('Fetching nodes')
@@ -129,6 +132,7 @@ var osm = {
 			var $user = $('.users div[data-user="'+point.obj.properties.user+'"');
 			var new_count;
 			var $newUsers;
+			var markup;
 
 			if ($user.length) {
 				new_count = $user.data('count') + 1;
@@ -136,13 +140,14 @@ var osm = {
 				$user.find('span.bar').css('width', ((new_count/total_results) * 100) + "%")
 				$user.attr('data-count', new_count);
 			} else {
-				$user = $("<div/>", {
-					"data-user": point.obj.properties.user, 
-					text: point.obj.properties.user + ": "
+				markup = _.template($('#userTemplate').html(), {
+					name: point.obj.properties.user,
+					count: 1
+				}, {
+					interpolate : /\{\{(.+?)\}\}/g
 				});
-				$user.append($("<span/>", {text: 1, "class": "count"}));
-				$user.append($("<span/>", {"class": "bar"}).css('width', ((new_count/total_results) * 100) + "%"));
-				$user.attr('data-count', 1);
+				$user = $(markup);
+				$user.find('span.bar').css('width', ((new_count/total_results) * 100) + "%");
 				$('.users').append($user);
 			}
 
