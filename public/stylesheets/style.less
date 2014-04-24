@@ -73,16 +73,24 @@ header {
 	#calendar {
 		width: 266px;
 		height: auto;
-		margin: 0 auto;
+		float:left;
 		display: block;
 		margin-top: 20px;
 	}
 	.users {
+		float: left;
+		margin-left: 20px;
+		margin-top: 20px;
 		> div {
 			display: block;
 			width: 400px;
 			border: 1px solid gray;
 			position: relative;
+			padding: 5px;
+			margin-top: 5px;
+			span.count {
+				float:right;
+			}
 			span.bar {
 				position: absolute;
 				left: 0;

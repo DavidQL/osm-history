@@ -127,12 +127,14 @@ var osm = {
 		},
 		updateUserTotals: function(point, total_results) {
 			var $user = $('.users div[data-user="'+point.obj.properties.user+'"');
-			var new_count
+			var new_count;
+			var $newUsers;
+
 			if ($user.length) {
 				new_count = $user.data('count') + 1;
 				$user.find('span.count').text(new_count);
 				$user.find('span.bar').css('width', ((new_count/total_results) * 100) + "%")
-				$user.data('count', new_count);
+				$user.attr('data-count', new_count);
 			} else {
 				$user = $("<div/>", {
 					"data-user": point.obj.properties.user, 
@@ -140,9 +142,14 @@ var osm = {
 				});
 				$user.append($("<span/>", {text: 1, "class": "count"}));
 				$user.append($("<span/>", {"class": "bar"}).css('width', ((new_count/total_results) * 100) + "%"));
-				$user.data('count', 1);
+				$user.attr('data-count', 1);
 				$('.users').append($user);
 			}
+
+			$newUsers = _.sortBy($('.users > div'), function($el) {
+				return -1 * $($el).data('count');
+			});
+			$('.users').empty().append($newUsers);
 		},
 		printMetadata: function(count, date) {
 			$('.results-count').show();
