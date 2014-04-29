@@ -1,75 +1,64 @@
 <!-- layout file includes stylesheets and external js libraries -->
 <% layout('layout') -%>
 
-<script src="/javascripts/bargraph.js"></script>
+<script src="/javascripts/bargraph_helper.js"></script>
 <h1><%= title %></h1>
 <br>
 
-<div name="chart1" style="float:left">
+<div name="bargraph-container">
   <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp (limit 200)</p>
   <svg class="chart" id="chart1"></svg>
-</div>
-<div name="chart2">
-  <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp (limit 200), in human readable format</p>
-  <svg class="chart" id="chart2"></svg>
+
+  <div class="loader" style="display: none;position: fixed;left: 0;top: 0;width: 100%;height: 100%;background: rgba(184, 185, 180, 1.0);z-index: 2000;">
+    <span style="color: white;width: 100%;text-align: center;display: block;top: 195px;position: relative;font-size: 30px;">Loading</span>
+    <img src="/images/ajax-loader.gif" style="position: relative;margin-left: 40%;right: 16px;margin-top: 200px;"/>
+  </div>
 </div>
 
 <script>
-$(document).ready(function(){
-    $("#select" ).on('change', function() { 
-      var field = $(this).val();
-      chart("#chart1","key",field);
-    })
-});
-
-// Extract the backend Express data (all nodes stored in the variable name 'data')
+var localData;
 
 function fetchNodes(username) 
 {
     var url = '/nodes?username='+username;
-    //toggleLoader('Fetching Nodes for user '+username);
+    toggleLoader('Fetching nodes for user '+username);
 
     $.get(url).done(function(results) {
-        console.log(results);
-        //toggleLoader();
+        localData = results;
+        chart("#chart1","key","date");
+        toggleLoader();
     });
 }
 
-var localData = <%- JSON.stringify(data) %>;
+// Get username from URL
 var theUser = <%- JSON.stringify(user) %>
 
 function chart(id, sort_by_key_or_value, field)
 {
-    $(id).empty();
-    // the countProperty function counts the frequency of each value present in the desired property
-    chartData = countProperty(field, localData)
-    sort(chartData,sort_by_key_or_value); // sort the timestamps to appear in chronological order
-    drawBarGraph(chartData, id);
+  $(id).empty();
+  // the countField function counts the frequency of each value present in the desired field
+  chartData = countField('date', localData)
+  // sort the timestamps to appear in chronological order
+  sort(chartData,sort_by_key_or_value); 
+  drawBarGraph(chartData, id);
 }
 
-chart("#chart1","key","timestamp");
+function toggleLoader(message) 
+{
+  if (message) 
+  {
+    $('.loader').show().find('span').text(message);
+    return;
+  }
+  $('.loader').hide();
+}
 
-chartData = countField("date", localData);
-sort(chartData,"value");
-drawBarGraph(chartData, "#chart2");
-
+// Actually get the data
 fetchNodes(theUser);
 
 </script>
 
-Field:
-<select id="select">
-  <option value="timestamp">Timestamp</option>
-  <option value="changeset">Changeset</option>
-</select>
-<br>
-<button onClick="chart('#chart1','key','timestamp')">Sort by Key</button>
-<button onClick="chart('#chart1','value','timestamp')">Sort by Value</button>
-
-<!--
-<p>This is a list of all timestamps found (limit 200):</p>
-<ul>
-<% for (var i = 0; i < data.length; i++)  {%>
-  <li><%= data[i].properties.timestamp %></li>
-<% } %>
-//-->
+<div>
+  <button onClick="chart('#chart1','key','date')">Sort by Time</button>
+  <button onClick="chart('#chart1','value','date')">Sort by Frequency</button>
+</div>
