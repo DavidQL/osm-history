@@ -20,6 +20,7 @@ header {
 	position:relative;
 }
 #map-container {
+	position:relative;
 	.time {
 		position: absolute;
 		right: 20px;
@@ -45,7 +46,7 @@ header {
 		display:none;
 		position: absolute;
 		right: 20px;
-		z-index: 10000;
+		z-index: 1000;
 		 background: rgba(0,0,0,0.7); 
 		padding: 10px;
 		top: 94px;
@@ -90,6 +91,8 @@ header {
 			margin-top: 5px;
 			span.count {
 				float:right;
+				z-index:1;
+				position:relative;
 			}
 			span.bar {
 				position: absolute;
@@ -97,7 +100,10 @@ header {
 				top: 0;
 				background: #ffe4e4;
 				height: 100%;
-				z-index: -1;
+			}
+			span.name {
+				z-index:1;
+				position:relative;
 			}
 		}
 	}

@@ -13,7 +13,7 @@ var osm = {
 			
 			osm.map.fetchNodes(lat, lon, map, date);
 
-			$('#calendar').datepicker({
+			$('#datepicker').datepicker({
 				numberOfMonths: 1,
 				defaultDate: moment(date).toDate(),
 				onSelect: function(dateText, inst) {

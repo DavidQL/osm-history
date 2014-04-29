@@ -1,127 +1,29 @@
-body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+#MainPadding {
+  padding-top: 120px;
+  padding-bottom: 20px;
 }
-header {
-  padding: 10px;
-  background: lightgray;
+#ButtonPadding {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
-header span.currentDb {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 5px;
-  margin: 0 10px;
+
+#WellPadding {
+  padding-top: 20px;
 }
-header a {
-  text-decoration: none;
-  color: darkblue;
-  border-bottom: 1px dashed darkblue;
+
+#well1 {
+  background-color: #E5E5E5;
 }
-#main {
-  padding: 20px;
-  position: relative;
+
+#well2{
+  background-color: #E5E5E5;
 }
-#map-container .time {
-  position: absolute;
-  right: 20px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  font-size: 45px;
+
+#Picture { 
+  height = 100px;
+  width = 100px;
 }
-#map-container #map {
-  height: 350px;
-}
-#map-container .results-count {
-  display: none;
-  position: absolute;
-  left: 27px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  font-size: 12px;
-  top: 329px;
-}
-#map-container .playback-options {
-  display: none;
-  position: absolute;
-  right: 20px;
-  z-index: 10000;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  top: 94px;
-  width: 215px;
-  height: 102px;
-}
-#map-container .playback-options button {
-  display: block;
-  clear: both;
-  margin: 0 auto;
-  background: white;
-  border: none;
-  padding: 10px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-#map-container .playback-options p {
-  text-align: center;
-  color: white;
-}
-#map-container .playback-options p a {
-  color: white;
-}
-#map-container #calendar {
-  width: 266px;
-  height: auto;
-  float: left;
-  display: block;
-  margin-top: 20px;
-}
-#map-container .users {
-  float: left;
-  margin-left: 20px;
-  margin-top: 20px;
-}
-#map-container .users > div {
-  display: block;
-  width: 400px;
-  border: 1px solid gray;
-  position: relative;
-  padding: 5px;
-  margin-top: 5px;
-}
-#map-container .users > div span.count {
-  float: right;
-}
-#map-container .users > div span.bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #ffe4e4;
-  height: 100%;
-  z-index: -1;
-}
-#map-container .loader {
-  display: none;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 2000;
-}
-#map-container .loader span {
-  color: white;
-  width: 100%;
-  text-align: center;
-  display: block;
-  top: 195px;
-  position: relative;
-  font-size: 30px;
-}
-#map-container .loader img {
-  position: relative;
-  margin-left: 50%;
-  right: 16px;
-  margin-top: 200px;
-}
+
+
+
+/**/
