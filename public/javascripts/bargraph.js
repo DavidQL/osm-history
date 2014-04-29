@@ -50,6 +50,15 @@ function countField(field_name, json_data)
     return chartData;
 }
 
+function sort(json_object, key_to_sort_by) {
+    function sortByKey(a, b) {
+        var x = a[key_to_sort_by];
+        var y = b[key_to_sort_by];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    }
+
+    json_object.sort(sortByKey);
+}
 
 function drawBarGraph(key_value_list, svg_id)
 {
@@ -75,15 +84,6 @@ function drawBarGraph(key_value_list, svg_id)
         .attr("width", width)
         .attr("height", barHeight * key_value_list.length);
 
-    /*chart.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + barHeight * key_value_list.length + ")")
-      .call(xAxis);*/
-
-  	/*chart.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);*/
-
     var bar = chart.selectAll("g")
         .data(key_value_list)
       .enter().append("g")
@@ -104,14 +104,4 @@ function drawBarGraph(key_value_list, svg_id)
         .attr("x", -100)
         .attr("y", barHeight/2+4)
         .text(function(d) { return d.key; });
-}
-
-function sort(json_object, key_to_sort_by) {
-    function sortByKey(a, b) {
-        var x = a[key_to_sort_by];
-        var y = b[key_to_sort_by];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    }
-
-    json_object.sort(sortByKey);
 }
