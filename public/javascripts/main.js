@@ -72,8 +72,8 @@ var osm = {
 			$('.users').empty();
 		},
 		fetchNodes: function(lat, lon, map, date, zoom) {
-			osm.map.toggleLoader('Fetching nodes')
 			var url = '/nodes?lat=' + lat + '&lon=' + lon + '&date=' + date;
+			osm.map.toggleLoader('Fetching nodes');
 			zoom && (url += '&zoom=' + zoom);
 			$.get(url).done(function(results) {
 				var map;
