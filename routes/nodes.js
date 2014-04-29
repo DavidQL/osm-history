@@ -31,10 +31,20 @@ exports.index = function(req, res) {
 		}
 	}
 
-	if (username) {
-		req.db.Node.find({'properties.user': username}).limit(20000).exec(function(err, node) {
-			res.send(node);
-		});
+	if (username) 
+	{
+		if (date)
+		{
+			req.db.Node.find({'properties.user': username, 'properties.timestamp' : date}).limit(20000).exec(function(err, node) {
+				res.send(node);
+			});
+		}
+		else 
+		{
+			req.db.Node.find({'properties.user': username}).limit(20000).exec(function(err, node) {
+				res.send(node);
+			});
+		}
 	}
 
 };

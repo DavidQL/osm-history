@@ -20,7 +20,7 @@ var localData;
 
 function fetchNodes(username) 
 {
-    var url = '/nodes?username='+username;
+    var url = '/nodes?username='+username;//+'&date=1260855444000';
     toggleLoader('Fetching nodes for user '+username);
 
     $.get(url).done(function(results) {
