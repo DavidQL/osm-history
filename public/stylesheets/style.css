@@ -24,6 +24,14 @@
   width = 100px;
 }
 
+.navbar-collapse {
+	padding:15px;
+}
+.navbar-collapse > * {
+	margin-right:10px;
+}
 
-
-/**/
+ul.features {
+	float:left;
+	clear:both;
+}

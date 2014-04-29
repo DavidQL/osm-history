@@ -48,27 +48,25 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">OSM History</a>
+          <a class="navbar-brand" href="/">OSM History</a>
 
+        </div>
 
-            <span class="currentDb">Current location DB: <%= currentDb %></span>
+        <div class="navbar-collapse collapse">
+          <!--Choose all or time period; location or user-->
             <div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              Location
+              <%= currentDb %>
               <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu db-select" role="menu">
                 <% allDbs.forEach(function(db) { %>
-                <li><a href="#"><%= db %></a></li>
+                  <li><a href="/switch-to/<%= db %>"><%= db %></a></li>
                 <% }) %>
               </ul>
             </div>
 
-            <input type="text" id="datepicker"/>
-        </div>
-        <div class="navbar-collapse collapse">
-          <!--Choose all or time period; location or user-->
-         
+            <input type="text" id="datepicker" placeholder="Select date"/>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
