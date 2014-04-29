@@ -19,7 +19,7 @@ var osm = {
 					window.location.href = "?lat="+lat+"&lon="+lon+"&date=" + date;
 				}
 			});
-			$('#datepicker').val(moment(date).format("DD/MM/YYYY"));
+			$('#datepicker').val(moment(date).format("MM/DD/YYYY"));
 
 			// on replay
 			$('.playback-options button').on('click', function() {
