@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes');
 var users = require('./routes/user');
-var d3 = require('./routes/d3');
+var bar_graph = require('./routes/bar_graph');
 var line_graph = require('./routes/line_graph');
 var nodes = require('./routes/nodes');
 var map = require('./routes/map');
@@ -36,7 +36,7 @@ var db = require('./db/db_adapter')(app);
 
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);
-app.get('/d3/:username', d3.d3);
+app.get('/bar_graph/:username', bar_graph.bar_graph);
 app.get('/line_graph', line_graph.line_graph);
 app.get('/nodes', nodes.index);
 app.get('/nodes/metadata', nodes.metadata);
