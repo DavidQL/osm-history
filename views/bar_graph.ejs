@@ -22,6 +22,7 @@ var localData;
 // Get username from URL
 var theUser = <%- JSON.stringify(user) %>
 var start_date = <%- JSON.stringify(start_date) %>
+var end_date = <%- JSON.stringify(end_date) %>
 
 // Actually get the data
 $( document ).ready(function() {
@@ -41,13 +42,20 @@ function toggleLoader(message)
 
 function fetchNodes(username) 
 {
-    var url = '/nodes?username='+username;//+"&date="+start_date+"&end_date=1963609460000";
+    var url = '/nodes?username='+username+'&date='+start_date+'&end_date='+end_date;
     toggleLoader('Fetching nodes for user '+username);
 
     $.get(url).done(function(results) {
-        localData = results;
-        chart("#chart1","key","date");
         toggleLoader();
+        if (results)
+        {
+          localData = results;
+          chart("#chart1","key","date");
+        }
+        else
+        {
+          $('#chart1').html = "ERROR!! :((";
+        }
     });
 }
 
