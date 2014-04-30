@@ -59,11 +59,13 @@ function bucketByTime(day_month_year, json_data)
   // Loop over all nodes and create a property dictionary to count the occurence of each property
   for (var i = json_data.length - 1; i >= 0; i--) {
     var timestamp = json_data[i].properties.timestamp;
+    
     var lat = json_data[i].properties.lat;
     var lon = json_data[i].properties.lon;
+    
     var key;
-    var month = parseInt(moment(timestamp).month())+1;
-    var date = parseInt(moment(timestamp).date())+1;
+    var month = parseInt(moment.utc(timestamp).month())+1;
+    var date = moment.utc(timestamp).date();
 
     if (month < 10)
     {
@@ -76,15 +78,15 @@ function bucketByTime(day_month_year, json_data)
 
     if (day_month_year == 'day')
     {
-      key = moment(timestamp).year() + '-' + month + '-' + date;
+      key = moment.utc(timestamp).year() + '-' + month + '-' + date;
     }
     else if (day_month_year == 'month')
     {
-      key = moment(timestamp).year() + '-' + month;
+      key = moment.utc(timestamp).year() + '-' + month;
     }
     else
     {
-      key = moment(timestamp).year();
+      key = moment.utc(timestamp).year();
     }
     
     if (prop_list[key])
@@ -107,7 +109,7 @@ function bucketByTime(day_month_year, json_data)
   // Add the field_name counts to the chart data list
   for(var item in prop_list) 
   { 
-    chartData.push({value: [prop_list[item], [latlist[item]/prop_list[item],lonlist[item]/prop_list[item]] ], key: item}); 
+    chartData.push({value: [prop_list[item], [latlist[item]/prop_list[item],lonlist[item]/prop_list[item]] ], key: item});
   };
 
   return chartData;
@@ -170,12 +172,16 @@ function drawBarGraph(key_value_list, svg_id)
       .text(function(d) { return d.key; });
 
   bar.on("click", function(d){
-      var timestamp = moment(d.key).valueOf();
+      var timestamp = moment.utc(d.key).valueOf();
       var lat = d.value[1][0];
       var lon = d.value[1][1];
       window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp;
-      // loop through the key
   });
+
+  bar.on("mouseover", function(d) {
+      
+  });
+
 }
 
 function chart(id, sort_by_key_or_value, field)

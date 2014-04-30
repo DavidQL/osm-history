@@ -15,14 +15,19 @@
   </div>
 </div>
 
+<% if (!start_date) { %>
+<%    start_date = "_";} %>
+<% if (!end_date) { %>
+<%    end_date = "_";} %>
+
 <script>
 
 var localData;
 
 // Get username from URL
-var theUser = <%- JSON.stringify(user) %>
-var start_date = <%- JSON.stringify(start_date) %>
-var end_date = <%- JSON.stringify(end_date) %>
+var theUser = <%- JSON.stringify(user) %>;
+var start_date = <%- JSON.stringify(start_date) %>;
+var end_date = <%- JSON.stringify(end_date) %>;
 
 // Actually get the data
 $( document ).ready(function() {

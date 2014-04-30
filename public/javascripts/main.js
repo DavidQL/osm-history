@@ -13,13 +13,13 @@ var osm = {
 
 			$('#datepicker').datepicker({
 				numberOfMonths: 1,
-				defaultDate: moment(date).toDate(),
+				defaultDate: moment.utc(date).toDate(),
 				onSelect: function(dateText, inst) {
-					var date = moment(dateText).valueOf();
+					var date = moment.utc(dateText).valueOf();
 					window.location.href = "?lat="+lat+"&lon="+lon+"&date=" + date;
 				}
 			});
-			$('#datepicker').val(moment(date).format("MM/DD/YYYY"));
+			$('#datepicker').val(moment.utc(date).format("MM/DD/YYYY"));
 
 			// on replay
 			$('.playback-options button').on('click', function() {
@@ -111,7 +111,7 @@ var osm = {
 
 					// every 100th, update the time display
 					if (i % 10 === 0 || ((results.length - i) < 10)) {
-						$('.time').text(moment(point.obj.properties.timestamp).format("hh:mm A"))
+						$('.time').text(moment.utc(point.obj.properties.timestamp).format("hh:mm A"))
 					}
 
 					this.updateUserTotals(point, total_results);
@@ -158,7 +158,7 @@ var osm = {
 		printMetadata: function(count, date) {
 			$('.results-count').show();
 			$('.results-count .count').text(count === 5000 ? '> 5000' : count);
-			$('.results-count .date').text(moment(date).format("dddd, MMMM Do YYYY"));
+			$('.results-count .date').text(moment.utc(date).format("dddd, MMMM Do YYYY"));
 		},
 		toggleLoader: function(message) {
 			if (message) {
