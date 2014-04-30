@@ -35,13 +35,14 @@ exports.index = function(req, res) {
 	{
 		if (date)
 		{
+			console.log("translated date: " + moment(date).year()+'-'+(parseInt(moment(date).month())+1).toString()+'-'+(parseInt(moment(date).date()+1)).toString());
 			req.db.Node.find({'properties.user': username, 'properties.timestamp' : date}).limit(20000).exec(function(err, node) {
 				res.send(node);
 			});
 		}
 		else 
 		{
-			req.db.Node.find({'properties.user': username}).limit(20000).exec(function(err, node) {
+			req.db.Node.find({'properties.user': username}).limit(250).exec(function(err, node) {
 				res.send(node);
 			});
 		}

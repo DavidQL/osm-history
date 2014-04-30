@@ -62,46 +62,44 @@ function sort(json_object, key_to_sort_by) {
 
 function drawBarGraph(key_value_list, svg_id)
 {
-	var width = 420+200,
-        barHeight = 25;
+	var height = 420,
+      maxWidth = 1000;
 
-    var x = d3.scale.linear()
-        .domain([0, d3.max(key_value_list, function(d) { return +d.value; })])
-        .range([0, width-200]);
+  var barWidth = maxWidth/key_value_list.length;
+  if (barWidth < 15)
+  {
+    barWidth = 15;
+  }
 
-	var y = d3.scale.linear()
-	    .range([barHeight * key_value_list.length, 0]);
+  var y = d3.scale.linear()
+      .domain([0, d3.max(key_value_list, function(d) { return +d.value; })])
+      .range([0, height-20]);
 
-	var xAxis = d3.svg.axis()
-	    .scale(x)
-	    .orient("bottom");
+	var x = d3.scale.linear()
+	    .range([barWidth * key_value_list.length, 0]);
 
-	var yAxis = d3.svg.axis()
-	    .scale(y)
-	    .orient("left");
+  var chart = d3.select(svg_id)
+      .attr("height", height)
+      .attr("width", barWidth * key_value_list.length);
 
-    var chart = d3.select(svg_id)
-        .attr("width", width)
-        .attr("height", barHeight * key_value_list.length);
+  var bar = chart.selectAll("g")
+      .data(key_value_list)
+    .enter().append("g")
+      .attr("transform", function(d, i) { return "translate(" + i * barWidth + ", 10)"; });
 
-    var bar = chart.selectAll("g")
-        .data(key_value_list)
-      .enter().append("g")
-        .attr("transform", function(d, i) { return "translate(200," + i * barHeight + ")"; });
+  bar.append("rect")
+      .attr("height", function(d) { return y(+d.value); })
+      .attr("width", barWidth - 1);
 
-    bar.append("rect")
-        .attr("width", function(d) { return x(+d.value); })
-        .attr("height", barHeight - 1);
+  bar.append("text")
+      .attr("y", function(d) { return y(d.value) - 10; })
+      .attr("x", barWidth / 2 + 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.value; });
 
-    bar.append("text")
-        .attr("x", function(d) { return x(d.value) - 3; })
-        .attr("y", barHeight / 2)
-        .attr("dy", ".35em")
-        .text(function(d) { return d.value; });
-
-    bar.append("text")
-        .attr("class", "label")
-        .attr("x", -100)
-        .attr("y", barHeight/2+4)
-        .text(function(d) { return d.key; });
+  bar.append("text")
+      .attr("class", "label")
+      .attr("y", -100)
+      .attr("x", barWidth/2+4)
+      .text(function(d) { return d.key; });
 }
