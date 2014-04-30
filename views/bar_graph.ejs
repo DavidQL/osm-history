@@ -6,7 +6,7 @@
 <br>
 
 <div name="bargraph-container">
-  <p>Below is a chart of the user <b><%= user %></b>'s nodes per timestamp (limit 200)</p>
+  <p>Below is a chart of the user <b><%= user %></b>'s nodes per date</p>
   <svg class="chart" id="chart1"></svg>
 
   <div class="loader" >
@@ -20,7 +20,7 @@ var localData;
 
 function fetchNodes(username) 
 {
-    var url = '/nodes?username='+username;//+'&date=1260855444000';
+    var url = '/nodes?username='+username;//+"&date="+start_date+"&end_date=1963609460000";
     toggleLoader('Fetching nodes for user '+username);
 
     $.get(url).done(function(results) {
@@ -32,12 +32,20 @@ function fetchNodes(username)
 
 // Get username from URL
 var theUser = <%- JSON.stringify(user) %>
+var start_date = <%- JSON.stringify(start_date) %>
 
 function chart(id, sort_by_key_or_value, field)
 {
   $(id).empty();
   // the countField function counts the frequency of each value present in the desired field
-  chartData = countField('date', localData)
+  if (localData.length > 30)
+  {
+    chartData = bucketByTime('day', localData);
+  }
+  else
+  {
+    chartData = countField('date', localData);
+  }
   // sort the timestamps to appear in chronological order
   sort(chartData,sort_by_key_or_value); 
   drawBarGraph(chartData, id);

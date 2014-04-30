@@ -6,6 +6,7 @@ exports.index = function(req, res) {
 	var lon = req.query.lon;
 	var username = req.query.username;
 	var date = req.query.date && parseInt(req.query.date, 10);
+	var end_date = req.query.end_date && parseInt(req.query.end_date, 10);
 	var maxDistance = req.query.zoom && ((360/(Math.pow(2,req.query.zoom)))*Math.PI)/180;
 	var point = {
 		type: "Point", 
@@ -33,7 +34,19 @@ exports.index = function(req, res) {
 
 	if (username) 
 	{
-		if (date)
+		if (date && end_date)
+		{
+			req.db.Node.find({'properties.user': username, 
+							  'properties.timestamp' : {
+							  	"$gte": moment(date).valueOf(),
+								"$lte": moment(end_date).valueOf()
+							}
+
+							}).limit(20000).exec(function(err, node) {
+								res.send(node);
+							});
+		}
+		else if (date && !end_date)
 		{
 			console.log("translated date: " + moment(date).year()+'-'+(parseInt(moment(date).month())+1).toString()+'-'+(parseInt(moment(date).date()+1)).toString());
 			req.db.Node.find({'properties.user': username, 'properties.timestamp' : date}).limit(20000).exec(function(err, node) {
@@ -42,7 +55,7 @@ exports.index = function(req, res) {
 		}
 		else 
 		{
-			req.db.Node.find({'properties.user': username}).limit(250).exec(function(err, node) {
+			req.db.Node.find({'properties.user': username}).limit(20000).exec(function(err, node) {
 				res.send(node);
 			});
 		}

@@ -36,7 +36,7 @@ var db = require('./db/db_adapter')(app);
 
 app.get('/', routes.index);
 app.get('/users/:username/nodes', users.nodes);
-app.get('/bar_graph/:username', bar_graph.bar_graph);
+app.get('/bar_graph', bar_graph.bar_graph);
 app.get('/line_graph', line_graph.line_graph);
 app.get('/nodes', nodes.index);
 app.get('/nodes/metadata', nodes.metadata);
