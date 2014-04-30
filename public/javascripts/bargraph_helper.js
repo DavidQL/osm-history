@@ -160,3 +160,20 @@ function drawBarGraph(key_value_list, svg_id)
       .attr("x", barWidth/2)
       .text(function(d) { return d.key; });
 }
+
+function chart(id, sort_by_key_or_value, field)
+{
+  $(id).empty();
+  // the countField function counts the frequency of each value present in the desired field
+  if (localData.length > 30)
+  {
+    chartData = bucketByTime('day', localData);
+  }
+  else
+  {
+    chartData = countField('date', localData);
+  }
+  // sort the timestamps to appear in chronological order
+  sort(chartData,sort_by_key_or_value); 
+  drawBarGraph(chartData, id);
+}

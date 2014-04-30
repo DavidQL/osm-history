@@ -16,7 +16,28 @@
 </div>
 
 <script>
+
 var localData;
+
+// Get username from URL
+var theUser = <%- JSON.stringify(user) %>
+var start_date = <%- JSON.stringify(start_date) %>
+
+// Actually get the data
+$( document ).ready(function() {
+  // Handler for .ready() called.
+  fetchNodes(theUser);
+});
+
+function toggleLoader(message) 
+{
+  if (message) 
+  {
+    $('.loader').show().find('span').text(message);
+    return;
+  }
+  $('.loader').hide();
+}
 
 function fetchNodes(username) 
 {
@@ -29,40 +50,6 @@ function fetchNodes(username)
         toggleLoader();
     });
 }
-
-// Get username from URL
-var theUser = <%- JSON.stringify(user) %>
-var start_date = <%- JSON.stringify(start_date) %>
-
-function chart(id, sort_by_key_or_value, field)
-{
-  $(id).empty();
-  // the countField function counts the frequency of each value present in the desired field
-  if (localData.length > 30)
-  {
-    chartData = bucketByTime('day', localData);
-  }
-  else
-  {
-    chartData = countField('date', localData);
-  }
-  // sort the timestamps to appear in chronological order
-  sort(chartData,sort_by_key_or_value); 
-  drawBarGraph(chartData, id);
-}
-
-function toggleLoader(message) 
-{
-  if (message) 
-  {
-    $('.loader').show().find('span').text(message);
-    return;
-  }
-  $('.loader').hide();
-}
-
-// Actually get the data
-fetchNodes(theUser);
 
 </script>
 
