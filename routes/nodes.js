@@ -16,7 +16,7 @@ exports.index = function(req, res) {
 
 	if (lat && lon) {
 		if (date) {
-			if (username) {
+			if (username && username !== 'undefined') {
 				query = {
 					"properties.timestamp": {
 						"$gte": moment.utc(date).valueOf(), 
