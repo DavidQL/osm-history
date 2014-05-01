@@ -50,6 +50,7 @@ var osm = {
 		},
 		createAndRenderMap: function(date, skipAnimation) {
 			var map;
+			$('.playback-options').fadeOut(500);
 			osm.map.resetMap();
 			map = osm.map.createNewMap();
 			osm.map.printMetadata(osm.map.results.length, date);
@@ -104,71 +105,52 @@ var osm = {
 		layMarkers: function(results, map, skipAnimation) {
 			var markers = new L.MarkerClusterGroup();
 			var total_results = results.length;
+			var layPoint = _.bind(function(results, i) {
+				var point;
+
+				if (i >= results.length) {
+					clearInterval(osm.map.markerInterval);
+					$('.playback-options').fadeIn(500);
+					return;
+				}
+				point = results[i];
+
+				// every 100th, update the time display
+				if (i % 10 === 0 || ((results.length - i) < 10)) {
+					$('.time').text(moment.utc(point.obj.properties.timestamp).format("hh:mm A"))
+				}
+
+				this.updateUserTotals(point, total_results);
+				
+				markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
+					icon: L.icon({
+						iconUrl: '/images/marker-icon.png',
+					    shadowUrl: '/images/marker-shadow.png'
+					})
+				}));
+			}, this);
+
 			osm.map.results = results;
 			results = _.sortBy(results, function(point) {
 				return point.obj.properties.timestamp;
 			});
 
 			map.addLayer(markers);
+			osm.map.markerInterval && clearInterval(osm.map.markerInterval);
 
 			if (skipAnimation) {
-				osm.map.markerInterval && clearInterval(osm.map.markerInterval);
 				_.each(results, function(result, i) {
-					var point;
-
-					point = result;
-
-					// every 100th, update the time display
-					if (i % 10 === 0 || ((results.length - i) < 10)) {
-						$('.time').text(moment.utc(point.obj.properties.timestamp).format("hh:mm A"))
-					}
-
-					this.updateUserTotals(point, total_results);
-					
-					markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
-						icon: L.icon({
-							iconUrl: '/images/marker-icon.png',
-						    shadowUrl: '/images/marker-shadow.png'
-						})
-					}));
-
-					if (i >= results.length - 1) {
-						$('.playback-options').fadeIn(500);
-						return;
-					}
-
+					layPoint(results, i);
 				}, this);
 
+				$('.playback-options').fadeIn(500);
 			} else {
 				(_.bind(function() {
 					var i = 0;
 					var framerate = 1000/(parseInt($('input#framerate').val(), 10));
 
 					osm.map.markerInterval = setInterval(_.bind(function() {
-						var point;
-
-						if (i >= results.length) {
-							clearInterval(osm.map.markerInterval);
-							$('.playback-options').fadeIn(500);
-							return;
-						}
-
-						point = results[i];
-
-						// every 100th, update the time display
-						if (i % 10 === 0 || ((results.length - i) < 10)) {
-							$('.time').text(moment.utc(point.obj.properties.timestamp).format("hh:mm A"))
-						}
-
-						this.updateUserTotals(point, total_results);
-						
-						markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
-							icon: L.icon({
-								iconUrl: '/images/marker-icon.png',
-							    shadowUrl: '/images/marker-shadow.png'
-							})
-						}));
-
+						layPoint(results, i);
 						i = i + 1;
 					}, this), framerate);
 				}, this))();				
