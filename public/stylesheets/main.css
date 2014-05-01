@@ -37,25 +37,33 @@ body {
   padding: 10px;
   top: 73px;
   width: 228px;
-  height: 102px;
+  height: 123px;
+  color: white;
 }
 #map-container .playback-options button {
-  display: block;
-  clear: both;
-  margin: 0 auto;
   background: white;
   border: none;
   padding: 10px;
   margin-bottom: 20px;
   cursor: pointer;
   border-radius: 5px;
+  color: black;
+  float: left;
 }
-#map-container .playback-options p {
+#map-container .playback-options span {
   text-align: center;
-  color: white;
+  position: relative;
+  top: 9px;
+  float: left;
+  font-size: 12px;
+  left: 5px;
 }
-#map-container .playback-options p a {
-  color: white;
+#map-container .playback-options span input {
+  color: black;
+  width: 35px;
+}
+#map-container .playback-options > div {
+  float: left;
 }
 #map-container #calendar {
   width: 266px;

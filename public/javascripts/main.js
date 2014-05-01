@@ -23,7 +23,7 @@ var osm = {
 			$('#datepicker').val(moment.utc(date).format("MM/DD/YYYY"));
 
 			// on replay
-			$('.playback-options button').on('click', function() {
+			$('.playback-options button.replay').on('click', function() {
 				var map;
 				$('.playback-options').fadeOut(500);
 				osm.map.resetMap();
@@ -33,7 +33,7 @@ var osm = {
 			});
 
 			// on re-fetch
-			$('.playback-options p a').on('click', function(e) {
+			$('.playback-options button.refetch').on('click', function(e) {
 				$('.playback-options').fadeOut(500);
 				if (osm.map.center) {
 					osm.map.fetchNodes(osm.map.center[0], osm.map.center[1], map, date, osm.map.zoom, username);
@@ -106,6 +106,8 @@ var osm = {
 
 			(_.bind(function() {
 				var i = 0;
+				var framerate = 1000/(parseInt($('input#framerate').val(), 10));
+				
 				var markerInterval = setInterval(_.bind(function() {
 					var point;
 
@@ -132,7 +134,7 @@ var osm = {
 					}));
 
 					i = i + 1;
-				}, this), 10);
+				}, this), framerate);
 			}, this))();
 		},
 		updateUserTotals: function(point, total_results) {
