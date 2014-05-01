@@ -15,41 +15,25 @@
   </div>
 </div>
 
+<% if (!start_date) { %>
+<%    start_date = "_";} %>
+<% if (!end_date) { %>
+<%    end_date = "_";} %>
+
 <script>
+
 var localData;
 
-function fetchNodes(username) 
-{
-    var url = '/nodes?username='+username;//+"&date="+start_date+"&end_date=1963609460000";
-    toggleLoader('Fetching nodes for user '+username);
-
-    $.get(url).done(function(results) {
-        localData = results;
-        chart("#chart1","key","date");
-        toggleLoader();
-    });
-}
-
 // Get username from URL
-var theUser = <%- JSON.stringify(user) %>
-var start_date = <%- JSON.stringify(start_date) %>
+var theUser = <%- JSON.stringify(user) %>;
+var start_date = <%- JSON.stringify(start_date) %>;
+var end_date = <%- JSON.stringify(end_date) %>;
 
-function chart(id, sort_by_key_or_value, field)
-{
-  $(id).empty();
-  // the countField function counts the frequency of each value present in the desired field
-  if (localData.length > 30)
-  {
-    chartData = bucketByTime('day', localData);
-  }
-  else
-  {
-    chartData = countField('date', localData);
-  }
-  // sort the timestamps to appear in chronological order
-  sort(chartData,sort_by_key_or_value); 
-  drawBarGraph(chartData, id);
-}
+// Actually get the data
+$( document ).ready(function() {
+  // Handler for .ready() called.
+  fetchNodes(theUser);
+});
 
 function toggleLoader(message) 
 {
@@ -61,8 +45,24 @@ function toggleLoader(message)
   $('.loader').hide();
 }
 
-// Actually get the data
-fetchNodes(theUser);
+function fetchNodes(username) 
+{
+    var url = '/nodes?username='+username+'&date='+start_date+'&end_date='+end_date;
+    toggleLoader('Fetching nodes for user '+username);
+
+    $.get(url).done(function(results) {
+        toggleLoader();
+        if (results)
+        {
+          localData = results;
+          chart("#chart1","key","date");
+        }
+        else
+        {
+          $('#chart1').html = "ERROR!! :((";
+        }
+    });
+}
 
 </script>
 

@@ -53,55 +53,66 @@ function countField(field_name, json_data)
 function bucketByTime(day_month_year, json_data)
 {
   var prop_list = {};
-    // Loop over all nodes and create a property dictionary to count the occurence of each property
-    for (var i = json_data.length - 1; i >= 0; i--) {
-      var timestamp = json_data[i].properties.timestamp;
-      var key;
-      var month = parseInt(moment(timestamp).month())+1;
-      var date = parseInt(moment(timestamp).date())+1;
+  var latlist = {};
+  var lonlist = {};
 
-      if (month < 10)
-      {
-        month = "0"+month;
-      }
-      if (date < 10)
-      {
-        date = "0"+date;
-      }
+  // Loop over all nodes and create a property dictionary to count the occurence of each property
+  for (var i = json_data.length - 1; i >= 0; i--) {
+    var timestamp = json_data[i].properties.timestamp;
+    
+    var lat = json_data[i].properties.lat;
+    var lon = json_data[i].properties.lon;
+    
+    var key;
+    var month = parseInt(moment.utc(timestamp).month())+1;
+    var date = moment.utc(timestamp).date();
 
-      if (day_month_year == 'day')
-      {
-        key = moment(timestamp).year() + '-' + month + '-' + date;
-      }
-      else if (day_month_year == 'month')
-      {
-        key = moment(timestamp).year() + '-' + month;
-      }
-      else
-      {
-        key = moment(timestamp).year();
-      }
-      
-      if (prop_list[key])
-      {
-        prop_list[key]++;
-      }
-      else
-      {
-        console.log(timestamp);
-        prop_list[key] = 1;
-      }
-    };
+    if (month < 10)
+    {
+      month = "0"+month;
+    }
+    if (date < 10)
+    {
+      date = "0"+date;
+    }
 
-    chartData = [];
+    if (day_month_year == 'day')
+    {
+      key = moment.utc(timestamp).year() + '-' + month + '-' + date;
+    }
+    else if (day_month_year == 'month')
+    {
+      key = moment.utc(timestamp).year() + '-' + month;
+    }
+    else
+    {
+      key = moment.utc(timestamp).year();
+    }
+    
+    if (prop_list[key])
+    {
+      prop_list[key]++;
+      latlist[key] += lat;
+      lonlist[key] += lon;
+    }
+    else
+    {
+      console.log(timestamp);
+      prop_list[key] = 1;
+      latlist[key] = lat;
+      lonlist[key] = lon;
+    }
+  };
 
-    // Add the field_name counts to the chart data list
-    for(var item in prop_list) 
-    { 
-      chartData.push({value: prop_list[item], key: item}); 
-    };
+  chartData = [];
 
-    return chartData;
+  // Add the field_name counts to the chart data list
+  for(var item in prop_list) 
+  { 
+    chartData.push({value: [prop_list[item], [latlist[item]/prop_list[item],lonlist[item]/prop_list[item]] ], key: item});
+  };
+
+  return chartData;
 }
 
 function sort(json_object, key_to_sort_by) {
@@ -116,7 +127,7 @@ function sort(json_object, key_to_sort_by) {
 
 function drawBarGraph(key_value_list, svg_id)
 {
-	var height = 500,
+	var height = 400,
       bottomPad = 100;
       topPad = 50;
       maxWidth = 1000;
@@ -128,7 +139,7 @@ function drawBarGraph(key_value_list, svg_id)
   }
 
   var y = d3.scale.linear()
-      .domain([0, d3.max(key_value_list, function(d) { return +d.value; })])
+      .domain([0, d3.max(key_value_list, function(d) { return +d.value[0]; })])
       .range([0, height-20]);
 
 	var x = d3.scale.linear()
@@ -144,19 +155,53 @@ function drawBarGraph(key_value_list, svg_id)
       .attr("transform", function(d, i) { return "translate(" + i * barWidth + ","+topPad+")"; });
 
   bar.append("rect")
-      .attr("y", function(d) { return height-bottomPad - (y(+d.value)/2); })
-      .attr("height", function(d) { return y(+d.value)/2; })
+      .attr("y", function(d) { return height-bottomPad - (y(+d.value[0])/2); })
+      .attr("height", function(d) { return y(+d.value[0])/2; })
       .attr("width", barWidth - 1);
 
   bar.append("text")
-      .attr("y", function(d) { return height-bottomPad - (y(+d.value)/2) - 20; })
+      .attr("y", function(d) { return height-bottomPad - (y(+d.value[0])/2) - 20; })
       .attr("x", barWidth / 2 + 3)
       .attr("dy", ".35em")
-      .text(function(d) { return d.value; });
+      .text(function(d) { return d.value[0]; });
 
   bar.append("text")
       .attr("class", "label")
       .attr("y", height-70)
       .attr("x", barWidth/2)
       .text(function(d) { return d.key; });
+
+  bar.on("click", function(d){
+      var timestamp = moment.utc(d.key).valueOf();
+      var lat = d.value[1][0];
+      var lon = d.value[1][1];
+      window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp;
+  });
+
+  bar.on("mouseover", function(d) {
+      
+  });
+
+}
+
+function chart(id, sort_by_key_or_value, field)
+{
+  $(id).empty();
+  // the countField function counts the frequency of each value present in the desired field
+  if (localData.length > 30)
+  {
+    chartData = bucketByTime('day', localData);
+  }
+  else
+  {
+    chartData = countField('date', localData);
+  }
+  // sort the timestamps to appear in chronological order
+  sort(chartData,sort_by_key_or_value); 
+  drawBarGraph(chartData, id);
+}
+
+function clickBar(timestamp)
+{
+  console.log("clicked bar with timestamp " + timestamp);
 }

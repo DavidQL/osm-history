@@ -19,8 +19,8 @@ exports.index = function(req, res) {
 				maxDistance: maxDistance || 0.00056222641, spherical: true, num:5000, lean: true, 
 				query: {
 					"properties.timestamp": {
-						"$gte": moment(date).valueOf(), 
-						"$lt": moment(date).endOf('day').valueOf()
+						"$gte": moment.utc(date).valueOf(), 
+						"$lt": moment.utc(date).endOf('day').valueOf()
 					}						
 				}
 
@@ -38,20 +38,13 @@ exports.index = function(req, res) {
 		{
 			req.db.Node.find({'properties.user': username, 
 							  'properties.timestamp' : {
-							  	"$gte": moment(date).valueOf(),
-								"$lte": moment(end_date).valueOf()
+							  	"$gte": moment.utc(date).valueOf(),
+								"$lte": moment.utc(end_date).valueOf()
 							}
 
 							}).limit(20000).exec(function(err, node) {
 								res.send(node);
 							});
-		}
-		else if (date && !end_date)
-		{
-			console.log("translated date: " + moment(date).year()+'-'+(parseInt(moment(date).month())+1).toString()+'-'+(parseInt(moment(date).date()+1)).toString());
-			req.db.Node.find({'properties.user': username, 'properties.timestamp' : date}).limit(20000).exec(function(err, node) {
-				res.send(node);
-			});
 		}
 		else 
 		{
