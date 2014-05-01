@@ -144,7 +144,7 @@ function sort(json_object, key_to_sort_by) {
     json_object.sort(sortByKey);
 }
 
-function drawBarGraph(key_value_list, svg_id)
+function drawBarGraph(key_value_list, svg_id, username)
 {
 	var height = 400,
       bottomPad = 100;
@@ -205,7 +205,7 @@ function drawBarGraph(key_value_list, svg_id)
       var timestamp = moment.utc(d.key).valueOf();
       var lat = d.value[1][0];
       var lon = d.value[1][1];
-      window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp;
+      window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp+"&username="+encodeURIComponent(username);
   });
 
   bar.on("mouseover", function(d){
@@ -220,7 +220,7 @@ function drawBarGraph(key_value_list, svg_id)
 
 }
 
-function chart(id, sort_by_key_or_value, field)
+function chart(id, sort_by_key_or_value, field, username)
 {
   $(id).empty();
   // the countField function counts the frequency of each value present in the desired field
@@ -234,5 +234,5 @@ function chart(id, sort_by_key_or_value, field)
   }
   // sort the timestamps to appear in chronological order
   sort(chartData,sort_by_key_or_value); 
-  drawBarGraph(chartData, id);
+  drawBarGraph(chartData, id, username);
 }

@@ -83,7 +83,7 @@ function fetchNodes(username)
         if (results.length != 0)
         {
           localData = results;
-          chart("#chart1","key","date");
+          chart("#chart1","key","date", username);
         }
         else
         {
@@ -97,8 +97,8 @@ function fetchNodes(username)
 <center>
 
 <div>
-  <button type="submit" class="btn btn-default" onClick="chart('#chart1','key','date')">Sort by Time</button>
-  <button type="submit" class="btn btn-default" onClick="chart('#chart1','value','date')">Sort by Frequency</button>
+  <button type="submit" class="btn btn-default" onClick="chart('#chart1','key','date', theUser)">Sort by Time</button>
+  <button type="submit" class="btn btn-default" onClick="chart('#chart1','value','date', theUser)">Sort by Frequency</button>
 </div>
 
 <br>
