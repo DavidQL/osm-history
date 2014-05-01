@@ -5,6 +5,8 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="/javascripts/c3.min.js"></script>
 <script src="/javascripts/c3.js"></script>
+<script src="/javascripts/linegraph_helper.js"></script>
+<script src="/javascripts/bargraph_helper.js"></script>
 
 <h1><%= title %></h1>
 <br>
@@ -12,13 +14,21 @@
 <div id="the_chart"></div>
 
 <script>
+var localData = <%- JSON.stringify(data) %>;
+sort(localData,'date');
+var data = countField('date', localData);
+result = processData(data);
+
+var x_array = result[0];
+var y_array = result[1];
+
 var chart = c3.generate({
+    bindto: '#the_chart',
     data: {
         x: 'x',
         columns: [
-            ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
-            ['data1', 30, 200, 100, 400, 150, 250],
-            ['data2', 130, 340, 200, 500, 250, 350]
+            x_array,
+            y_array 
         ]
     },
     axis: {
@@ -29,16 +39,10 @@ var chart = c3.generate({
             }
         }
     },
-    bindto: '#the_chart'
 });
 
-setTimeout(function () {
-    chart.load({
-        columns: [
-            ['data3', 400, 500, 450, 700, 600, 500]
-        ]
-    });
-}, 1000);
+
+
 </script>
 
 
