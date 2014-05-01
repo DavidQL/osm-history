@@ -129,7 +129,7 @@ function bucketByTime(day_month_year, json_data)
 
 function sort(json_object, key_to_sort_by) {
     function sortByKey(a, b) {
-        if (a[key_to_sort_by][0]) // value has frequency AND lat,long access just element [0] for freq
+        if (key_to_sort_by == 'value') // value has frequency AND lat,long access just element [0] for freq
         {
           var x = a[key_to_sort_by][0];
           var y = b[key_to_sort_by][0];
