@@ -52,6 +52,7 @@ function getAutoCompleteData()
 
       $('#username').autocomplete({
         lookup: finalList,
+        lookupLimit: 10,
         onSelect: function (suggestion) {
             window.location.href = "/bar_graph?username="+suggestion.value;
         }
