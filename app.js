@@ -11,6 +11,7 @@ var bar_graph = require('./routes/bar_graph');
 var line_graph = require('./routes/line_graph');
 var nodes = require('./routes/nodes');
 var map = require('./routes/map');
+var autocomplete = require('./routes/autocomplete')
 var engine = require('ejs-locals');
 
 var app = express();
@@ -42,6 +43,7 @@ app.get('/nodes', nodes.index);
 app.get('/nodes/metadata', nodes.metadata);
 app.get('/map', map.index);
 app.get('/switch-to/:db_name', db.switchDbs);
+app.get('/autocomplete', autocomplete.autocomplete);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

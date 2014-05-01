@@ -27,15 +27,27 @@ function countProperty(property_name, json_data)
 function countField(field_name, json_data)
 {
 	var prop_list = {};
+  var latlist = {};
+  var lonlist = {};
+
     // Loop over all nodes and create a property dictionary to count the occurence of each property
     for (var i = json_data.length - 1; i >= 0; i--) {
-      if (prop_list[json_data[i][field_name]])
+      
+      var lat = json_data[i].properties.lat;
+      var lon = json_data[i].properties.lon;
+      var key = json_data[i][field_name];
+
+      if (prop_list[key])
       {
-        prop_list[json_data[i][field_name]]++;
+        prop_list[key]++;
+        latlist[key] += lat;
+        lonlist[key] += lon;
       }
       else
       {
-        prop_list[json_data[i][field_name] ]= 1;
+        prop_list[key] = 1;
+        latlist[key] = lat;
+        lonlist[key] = lon;
       }
     };
 
@@ -44,7 +56,7 @@ function countField(field_name, json_data)
     // Add the field_name counts to the chart data list
     for(var item in prop_list) 
     { 
-      chartData.push({value: prop_list[item], key: item}); 
+      chartData.push({value: [prop_list[item], [latlist[item]/prop_list[item],lonlist[item]/prop_list[item]]], key: item}); 
     };
 
     return chartData;
@@ -117,7 +129,7 @@ function bucketByTime(day_month_year, json_data)
 
 function sort(json_object, key_to_sort_by) {
     function sortByKey(a, b) {
-        if (key_to_sort_by == 'value') // value has frequency AND lat,long access just element [0] for freq
+        if (a[key_to_sort_by][0]) // value has frequency AND lat,long access just element [0] for freq
         {
           var x = a[key_to_sort_by][0];
           var y = b[key_to_sort_by][0];
