@@ -15,7 +15,6 @@
 
 <script>
 var localData = <%- JSON.stringify(data) %>;
-sort(localData,'date');
 var data = countField('date', localData);
 result = processData(data,'Number of Edits');
 
@@ -35,7 +34,8 @@ var chart = c3.generate({
         x: {
             type: 'timeseries',
             tick: {
-                format: '%Y-%m-%d'
+                format: '%Y-%m-%d',
+                rotate: 90
             }
         }
     },

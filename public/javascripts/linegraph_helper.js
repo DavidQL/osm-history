@@ -6,7 +6,7 @@ function processData(data,y_label){
 	date[0] = 'x';
 	count[0] = y_label;
 	for(i = 1; i <=length; ++i){	
-		count[i] = data[i-1].value; 
+		count[i] = data[i-1].value[0]; 
 		date[i] = formatDate(data[i-1].key,'.');
 	}
 	
