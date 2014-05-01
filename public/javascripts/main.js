@@ -8,10 +8,11 @@ var osm = {
 			var lon = $('#map').data('lon');
 			var map = osm.map.createNewMap();
 			var date = $('#map').data('date');
-			
-			osm.map.fetchNodes(lat, lon, map, date);
+			var username = $('#map').data('username');
 
-			$('#datepicker').datepicker({
+			osm.map.fetchNodes(lat, lon, map, date, null, username);
+
+			$('#datepicker').show().datepicker({
 				numberOfMonths: 1,
 				defaultDate: moment.utc(date).toDate(),
 				onSelect: function(dateText, inst) {
@@ -35,12 +36,17 @@ var osm = {
 			$('.playback-options p a').on('click', function(e) {
 				$('.playback-options').fadeOut(500);
 				if (osm.map.center) {
-					osm.map.fetchNodes(osm.map.center[0], osm.map.center[1], map, date, osm.map.zoom);
+					osm.map.fetchNodes(osm.map.center[0], osm.map.center[1], map, date, osm.map.zoom, username);
 				} else {
-					osm.map.fetchNodes(lat, lon, map, date, osm.map.zoom);
+					osm.map.fetchNodes(lat, lon, map, date, osm.map.zoom, username);
 				}
-				
 			});
+
+			if (username && username !== "undefined") {
+				$("<div/>", {"class": "user-filter"})
+					.text("Filtered to nodes created by: " + username)
+					.insertAfter('#calendar');
+			}
 		},
 		createNewMap: function() {
 			var lat = $('#map').data('lat');
@@ -70,10 +76,12 @@ var osm = {
 			$map.remove();
 			$('.users').empty();
 		},
-		fetchNodes: function(lat, lon, map, date, zoom) {
+		fetchNodes: function(lat, lon, map, date, zoom, username) {
 			var url = '/nodes?lat=' + lat + '&lon=' + lon + '&date=' + date;
 			osm.map.toggleLoader('Fetching nodes');
 			zoom && (url += '&zoom=' + zoom);
+			username && (url += '&username=' + username);
+
 			$.get(url).done(function(results) {
 				var map;
 				osm.map.toggleLoader();

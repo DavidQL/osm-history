@@ -12,18 +12,29 @@ exports.index = function(req, res) {
 		type: "Point", 
 		coordinates: [Number(lon), Number(lat)]
 	};
+	var query;
 
 	if (lat && lon) {
 		if (date) {
-			return req.db.Node.geoNear(point, {
-				maxDistance: maxDistance || 0.00056222641, spherical: true, num:5000, lean: true, 
-				query: {
+			if (username) {
+				query = {
+					"properties.timestamp": {
+						"$gte": moment.utc(date).valueOf(), 
+						"$lt": moment.utc(date).endOf('day').valueOf()
+					},
+					"properties.user": username					
+				}
+			} else {
+				query = {
 					"properties.timestamp": {
 						"$gte": moment.utc(date).valueOf(), 
 						"$lt": moment.utc(date).endOf('day').valueOf()
 					}						
 				}
-
+			}
+			return req.db.Node.geoNear(point, {
+				maxDistance: maxDistance || 0.00056222641, spherical: true, num:5000, lean: true, 
+				query: query
 			}, function(err, results, stats) {
 				console.log('date stats', stats)
 				res.send(results);

@@ -1,24 +1,9 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-header {
-	padding:10px;
-	background: lightgray;
-	span.currentDb {
-		background: rgba(255,255,255,0.9);
-		padding: 5px;
-		margin: 0 10px;
-	}
-	a {
-		text-decoration: none;
-		color: darkblue;
-		border-bottom: 1px dashed darkblue;
-	}
-}
-#main {
-	padding: 20px;
-	position:relative;
-}
+.navbar-collapse input#datepicker {
+	display:none;
+} 
 #map-container {
 	position:relative;
 	.time {
@@ -78,10 +63,16 @@ header {
 		display: block;
 		margin-top: 20px;
 	}
+	.user-filter {
+		clear: both;
+		text-align: center;
+		margin-bottom:20px;
+	}
 	.users {
-		float: left;
-		margin-left: 20px;
-		margin-top: 20px;
+		margin: 0 auto;
+		display: block;
+		clear: both;
+		width: 400px;
 		> div {
 			display: block;
 			width: 400px;
