@@ -2,11 +2,10 @@
 <% layout('layout') -%>
 
 <script src="/javascripts/bargraph_helper.js"></script>
-<h1><%= title %></h1>
+<center><h1><b><%= user %></b>'s nodes created by date</h1></center>
 <br>
 
-<div name="bargraph-container">
-  <p>Below is a chart of the user <b><%= user %></b>'s nodes per date</p>
+<div name="bargraph-container" id="farty-test">
   <svg class="chart" id="chart1"></svg>
 
   <div class="loader" >

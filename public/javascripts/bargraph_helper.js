@@ -97,7 +97,7 @@ function bucketByTime(day_month_year, json_data)
     }
     else
     {
-      console.log(timestamp);
+      //console.log(timestamp);
       prop_list[key] = 1;
       latlist[key] = lat;
       lonlist[key] = lon;
@@ -117,11 +117,18 @@ function bucketByTime(day_month_year, json_data)
 
 function sort(json_object, key_to_sort_by) {
     function sortByKey(a, b) {
-        var x = a[key_to_sort_by];
-        var y = b[key_to_sort_by];
+        if (key_to_sort_by == 'value') // value has frequency AND lat,long access just element [0] for freq
+        {
+          var x = a[key_to_sort_by][0];
+          var y = b[key_to_sort_by][0];
+        }
+        else
+        {
+          var x = a[key_to_sort_by];
+          var y = b[key_to_sort_by];
+        }
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     }
-
     json_object.sort(sortByKey);
 }
 
@@ -154,6 +161,17 @@ function drawBarGraph(key_value_list, svg_id)
     .enter().append("g")
       .attr("transform", function(d, i) { return "translate(" + i * barWidth + ","+topPad+")"; });
 
+  var tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("border", "0px solid")
+      .style("border-radius", "10px")
+      .style("padding", "10px")
+      .style("background-color", "#b0c4de")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+      .text("a simple tooltip");
+
   bar.append("rect")
       .attr("y", function(d) { return height-bottomPad - (y(+d.value[0])/2); })
       .attr("height", function(d) { return y(+d.value[0])/2; })
@@ -178,8 +196,14 @@ function drawBarGraph(key_value_list, svg_id)
       window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp;
   });
 
-  bar.on("mouseover", function(d) {
-      
+  bar.on("mouseover", function(d){
+      return tooltip.style("visibility", "visible").text(d.key);
+  });
+  bar.on("mousemove", function(d){
+      return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+  });
+  bar.on("mouseout", function(d){
+      return tooltip.style("visibility", "hidden");
   });
 
 }
@@ -199,9 +223,4 @@ function chart(id, sort_by_key_or_value, field)
   // sort the timestamps to appear in chronological order
   sort(chartData,sort_by_key_or_value); 
   drawBarGraph(chartData, id);
-}
-
-function clickBar(timestamp)
-{
-  console.log("clicked bar with timestamp " + timestamp);
 }

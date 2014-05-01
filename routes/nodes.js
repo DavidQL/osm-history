@@ -48,7 +48,7 @@ exports.index = function(req, res) {
 		}
 		else 
 		{
-			req.db.Node.find({'properties.user': username}).limit(20000).exec(function(err, node) {
+			req.db.Node.find({'properties.user': username}).limit(10000).exec(function(err, node) {
 				res.send(node);
 			});
 		}
