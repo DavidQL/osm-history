@@ -2,12 +2,13 @@
 <% layout('layout') -%>
 
 <script src="/javascripts/bargraph_helper.js"></script>
-<center><h1><b><%= user %></b>'s nodes created by date</h1></center>
+<center><h1><b><%= user %></b>'s nodes created by date</h1>
 <br>
 
 <div name="bargraph-container" id="farty-test">
   <svg class="chart" id="chart1"></svg>
 
+  </center>
   <div class="loader" >
     <span>Loading</span>
     <img src="/images/ajax-loader.gif"/>
@@ -65,7 +66,9 @@ function fetchNodes(username)
 
 </script>
 
+<center>
 <div>
-  <button onClick="chart('#chart1','key','date')">Sort by Time</button>
-  <button onClick="chart('#chart1','value','date')">Sort by Frequency</button>
+  <button type="submit" class="btn btn-default" onClick="chart('#chart1','key','date')">Sort by Time</button>
+  <button type="submit" class="btn btn-default" onClick="chart('#chart1','value','date')">Sort by Frequency</button>
 </div>
+</center>
