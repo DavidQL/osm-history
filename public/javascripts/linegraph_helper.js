@@ -1,20 +1,14 @@
-function processData(data){
-	var date = new Array(data.length+1);
-	var count = new Array(data.length);
+function processData(data,y_label){
+	var length = data.length;
+	var date = new Array(length+1);
+	var count = new Array(length+1);
 	
 	date[0] = 'x';
-	for(i = 0; i < data.length; ++i){
-		if( i == 0 ){
-			count[i] = data[i].value; 
-		}
-		else{
-			count[i] = data[i].value;
-			date[i] = formatDate(data[i].key,'.');
-		}
+	count[0] = y_label;
+	for(i = 1; i <=length; ++i){	
+		count[i] = data[i-1].value; 
+		date[i] = formatDate(data[i-1].key,'.');
 	}
-	
-	date[data.length] = formatDate(data[data.length-1].key,'.');
-	console.log([date,count]);
 	
 	return [date,count]
 }
@@ -23,6 +17,5 @@ function formatDate(date,delimiter){
 	var result;
 	result = date.substring(0,date.indexOf(delimiter));
 	document.write(result);
-	
 	return result;
 }

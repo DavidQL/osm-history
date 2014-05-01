@@ -17,7 +17,7 @@
 var localData = <%- JSON.stringify(data) %>;
 sort(localData,'date');
 var data = countField('date', localData);
-result = processData(data);
+result = processData(data,'Number of Edits');
 
 var x_array = result[0];
 var y_array = result[1];
