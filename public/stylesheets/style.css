@@ -32,8 +32,12 @@
   top:-5px;
   float:left;
 }
-.navbar-collapse .input-group {
+.navbar-collapse .date-select {
   width:200px;
+  display: none;
+}
+.navbar-collapse .date-select.visible {
+  display:table;
 }
 
 #ui-datepicker-div {
@@ -43,4 +47,11 @@
 ul.features {
 	float:left;
 	clear:both;
+}
+
+.index-page #mapForm {
+  margin-top:20px;
+}
+.index-page .interesting-days {
+  margin-top:20px;
 }

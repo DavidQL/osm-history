@@ -1,6 +1,14 @@
 var osm = {
-	init: function() {
-		
+	index: {
+		init: function() {
+			$('#mapForm').on('submit', function(e) {
+				e.preventDefault();
+				var args = $(this).serialize();
+				args += ("&date=" + moment.utc($('input#date').val()).valueOf());
+				window.location.href = "/map?" + args;
+			});
+			$('#mapForm input[id=date]').datepicker();
+		}
 	},
 	map: {
 		init: function() {
@@ -12,7 +20,8 @@ var osm = {
 
 			osm.map.fetchNodes(lat, lon, map, date, null, username);
 
-			$('#datepicker').show().datepicker({
+			$('.date-select').addClass('visible');
+			$('#datepicker').datepicker({
 				numberOfMonths: 1,
 				defaultDate: moment.utc(date).toDate(),
 				onSelect: function(dateText, inst) {
@@ -203,8 +212,6 @@ var osm = {
 window.osm = osm;
 
 $(document).ready(function() {
-	osm.init();
-	if ($('#map').length) {
-		osm.map.init();
-	}
+	$('#map').length && osm.map.init();
+	$('.index-page').length && osm.index.init();
 });
