@@ -55,3 +55,7 @@ ul.features {
 .index-page .interesting-days, .index-page .interesting-users {
   margin-top:20px;
 }
+
+.index-page #well1 img, .index-page #well2 img {
+  width: 100%;
+}
