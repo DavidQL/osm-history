@@ -49,9 +49,9 @@ ul.features {
 	clear:both;
 }
 
-.index-page #mapForm {
+.index-page #mapForm, .index-page #analyticsForm {
   margin-top:20px;
 }
-.index-page .interesting-days {
+.index-page .interesting-days, .index-page .interesting-users {
   margin-top:20px;
 }

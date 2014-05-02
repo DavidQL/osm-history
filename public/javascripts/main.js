@@ -8,6 +8,11 @@ var osm = {
 				window.location.href = "/map?" + args;
 			});
 			$('#mapForm input[id=date]').datepicker();
+
+			$('#analyticsForm').on('submit', function(e) {
+				e.preventDefault();
+				window.location.href = "/bar_graph?username=" + $('#analyticsForm #username').val();
+			});
 		}
 	},
 	map: {
