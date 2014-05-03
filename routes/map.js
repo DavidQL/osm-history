@@ -5,11 +5,13 @@ exports.index = function(req, res){
 	var lon = req.query.lon;
 	var date = req.query.date;
 	var username = req.query.username;
+	var zoom = req.query.zoom;
 
 	res.render('map', _.extend(res.config, { 
 		lat: lat,
 		lon: lon,
 		date: date,
-		username: username
+		username: username,
+		zoom: zoom
 	}));
 };

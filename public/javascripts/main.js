@@ -19,11 +19,15 @@ var osm = {
 		init: function() {
 			var lat = $('#map').data('lat');
 			var lon = $('#map').data('lon');
-			var map = osm.map.createNewMap();
+			var zoom = $('#map').data('zoom');
 			var date = $('#map').data('date');
 			var username = $('#map').data('username');
 
-			osm.map.fetchNodes(lat, lon, map, date, null, username);
+			osm.map.zoom = (zoom !== "undefined") && parseInt(zoom, 10);
+
+			var map = osm.map.createNewMap();
+
+			osm.map.fetchNodes(lat, lon, map, date, osm.map.zoom, username);
 
 			$('.date-select').addClass('visible');
 			$('#datepicker').datepicker({

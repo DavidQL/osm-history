@@ -205,7 +205,7 @@ function drawBarGraph(key_value_list, svg_id, username)
       var timestamp = moment.utc(d.key).valueOf();
       var lat = d.value[1][0];
       var lon = d.value[1][1];
-      window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp+"&username="+encodeURIComponent(username);
+      window.location.href = "/map?lat="+lat+"&lon="+lon+"&date="+timestamp+"&username="+encodeURIComponent(username) + "&zoom=7";
   });
 
   bar.on("mouseover", function(d){
