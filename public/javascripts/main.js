@@ -124,7 +124,7 @@ var osm = {
 			var markers = new L.MarkerClusterGroup();
 			var total_results = results.length;
 			var layPoint = _.bind(function(results, i) {
-				var point;
+				var point, text;
 
 				if (i >= results.length) {
 					clearInterval(osm.map.markerInterval);
@@ -140,12 +140,19 @@ var osm = {
 
 				this.updateUserTotals(point, total_results);
 				
+				text = _.template($('#markerTemplate').html(), {
+					user: point.obj.properties.user,
+					date: point.obj.properties.timestamp
+				}, {
+					interpolate : /\{\{(.+?)\}\}/g
+				});
+
 				markers.addLayer(new L.marker([point.obj.properties.lat, point.obj.properties.lon], {
 					icon: L.icon({
 						iconUrl: '/images/marker-icon.png',
 					    shadowUrl: '/images/marker-shadow.png'
 					})
-				}));
+				}).bindPopup(text));
 			}, this);
 
 			osm.map.results = results;

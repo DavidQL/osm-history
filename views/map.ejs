@@ -34,6 +34,12 @@
 	</script>
 
 
+	<script type="text/ejs" id="markerTemplate">
+		<strong>User:</strong> {{ user }}
+		<br/>
+		<strong>Time:</strong> {{ moment.utc(date).format("hh:MM:SS A") }}
+	</script>
+
 	<div class="loader">
 		<span>Loading</span>
 		<img src="/images/ajax-loader.gif"/>
