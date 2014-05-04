@@ -64,7 +64,6 @@ exports.index = function(req, res) {
 			});
 		}
 	}
-
 };
 
 exports.metadata = function(req, res) {

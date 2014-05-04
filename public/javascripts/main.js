@@ -183,7 +183,7 @@ var osm = {
 
 		},
 		updateUserTotals: function(point, total_results) {
-			var $user = $('.users div[data-user="'+point.obj.properties.user+'"');
+			var $user = $('.users div[data-user="'+point.obj.properties.user+'"]');
 			var new_count;
 			var $newUsers;
 			var markup;
