@@ -2,11 +2,20 @@
 <% layout('layout') -%>
 
 <script src="/javascripts/bargraph_helper.js"></script>
-<script src="/javascripts/jquery.autocomplete.js"></script>
 <center><h1><b><%= user %></b>'s nodes created by date</h1>
 <br>
 
-<div name="bargraph-container" id="bargraph-container">
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4">
+      <label class="sr-only" for="username">Username</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="Search for a new user...">
+    </div>
+  </div>
+</form>
+
+<div name="bargraph-container" id="bargraph-container" style="overflow:auto">
   <svg class="chart" id="chart1"></svg>
 
   </center>
@@ -57,10 +66,7 @@ function getAutoCompleteData()
             window.location.href = "/bar_graph?username="+suggestion.value;
         }
       });
-
   });
-
-
 }
 
 function toggleLoader(message) 
@@ -87,8 +93,33 @@ function fetchNodes(username)
         }
         else
         {
-          $('#bargraph-container').html = "ERROR!! :((";
+          $('#bargraph-container').html("<h2>No nodes found :((</h2>");
         }
+
+        console.log(localData[0].date.split("T")[0]);
+        console.log(localData[localData.length-1].date.split("T")[0]);
+
+        $(function() {
+        $( "#from" ).datepicker({
+          dateFormat: "yy-mm-dd",
+          defaultDate: localData[0].date.split("T")[0],
+          changeMonth: true,
+          numberOfMonths: 1,
+          onClose: function( selectedDate ) {
+            $( "#to" ).datepicker( "option", "minDate", selectedDate );
+          }
+        });
+        $( "#to" ).datepicker({
+          dateFormat: "yy-mm-dd",
+          defaultDate: localData[localData.length-1].date.split("T")[0],
+          changeMonth: true,
+          numberOfMonths: 1,
+          onClose: function( selectedDate ) {
+            $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+          }
+        });
+      });
+
     });
 }
 
@@ -103,14 +134,9 @@ function fetchNodes(username)
 
 <br>
 
-<form class="form-horizontal" role="form">
-  <div class="form-group">
-    <div class="col-xs-4"></div>
-    <div class="col-xs-4">
-      <label class="sr-only" for="username">Username</label>
-      <input type="text" class="form-control" id="username" name="username" placeholder="Search for a new user...">
-    </div>
-  </div>
-</form>
+<label for="from">From</label>
+<input type="text" id="from" name="from">
+<label for="to">to</label>
+<input type="text" id="to" name="to">
 
 </center>

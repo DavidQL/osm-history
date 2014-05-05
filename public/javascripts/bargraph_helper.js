@@ -199,7 +199,23 @@ function drawBarGraph(key_value_list, svg_id, username)
       .attr("class", "label")
       .attr("y", height-70)
       .attr("x", barWidth/2)
-      .text(function(d) { return d.key; });
+      .text(function(d,i) { 
+        if (key_value_list.length > 15)
+        {
+          if (i % 10 == 0)
+          {
+            return d.key;
+          }
+          else
+          {
+            return "";
+          }
+        }
+        else
+        {
+          return d.key; 
+        }
+      });
 
   bar.on("click", function(d){
       var timestamp = moment.utc(d.key).valueOf();

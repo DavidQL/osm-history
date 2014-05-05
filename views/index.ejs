@@ -68,11 +68,42 @@
         </div>
 		    <form role="form" id="analyticsForm">
 		    	<div class="form-group">
-				    <label for="lat">Username</label>
-				    <input type="text" class="form-control" id="username" placeholder="" name="username">
+				    <label for="username">OR</label>
+				    <br>
+				    <input type="text" class="form-control" id="username" placeholder="Search by username" name="username">
 					</div>
-					<button type="submit" class="btn btn-default">Go!</button>
 		    </form>
+
+		    <script>
+		    	var userList;
+
+				// Actually get the data
+				$( document ).ready(function() {
+				  getAutoCompleteData();
+				});
+
+				function getAutoCompleteData()
+				{
+				  $.get('/autocomplete').done(function(results) {
+				      userList = results;
+
+				      var finalList = [];
+
+				      for(var user in userList) 
+				      {
+				        finalList.push({value: userList[user], data: "null"});
+				      }
+
+				      $('#username').autocomplete({
+				        lookup: finalList,
+				        lookupLimit: 10,
+				        onSelect: function (suggestion) {
+				            window.location.href = "/bar_graph?username="+suggestion.value;
+				        }
+				      });
+				  });
+				}
+		    </script>
 	  	</div>
 		</div>
 	</div>
