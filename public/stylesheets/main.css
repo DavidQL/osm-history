@@ -101,6 +101,7 @@ body {
   top: 0;
   background: #ffe4e4;
   height: 100%;
+  border-right: 1px solid gray;
 }
 #map-container .users > div span.name {
   z-index: 1;
