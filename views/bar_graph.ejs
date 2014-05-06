@@ -116,6 +116,8 @@ function fetchNodes(username)
           numberOfMonths: 1,
           onClose: function( selectedDate ) {
             $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+            console.log($("#to").datepicker("getDate"));
+            console.log(selectedDate);
           }
         });
       });
