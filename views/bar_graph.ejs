@@ -96,14 +96,12 @@ function fetchNodes(username)
           $('#bargraph-container').html("<h2>No nodes found :((</h2>");
         }
 
-        console.log(localData[0].date.split("T")[0]);
-        console.log(localData[localData.length-1].date.split("T")[0]);
-
         $(function() {
         $( "#from" ).datepicker({
           dateFormat: "yy-mm-dd",
           defaultDate: localData[0].date.split("T")[0],
           changeMonth: true,
+          changeYear: true,
           numberOfMonths: 1,
           onClose: function( selectedDate ) {
             $( "#to" ).datepicker( "option", "minDate", selectedDate );
@@ -113,11 +111,40 @@ function fetchNodes(username)
           dateFormat: "yy-mm-dd",
           defaultDate: localData[localData.length-1].date.split("T")[0],
           changeMonth: true,
+          changeYear: true,
           numberOfMonths: 1,
           onClose: function( selectedDate ) {
             $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-            console.log($("#to").datepicker("getDate"));
-            console.log(selectedDate);
+            
+            var start = $("#from").datepicker("getDate");
+            var start_day = start.getDate();
+            var start_month = start.getMonth() + 1; // Months are zero based
+            var start_year = start.getFullYear();
+            if (start_month < 10)
+            {
+              start_month = "0" + start_month;
+            }
+            if (start_day < 10)
+            {
+              start_day = "0" + start_day;
+            }
+            var start_formatted = start_year + "-" + start_month + "-" + start_day;
+
+            var end = $("#to").datepicker("getDate");
+            var end_day = end.getDate();
+            var end_month = end.getMonth() + 1; // Months are zero based
+            var end_year = end.getFullYear();
+            if (end_month < 10)
+            {
+              end_month = "0" + end_month;
+            }
+            if (end_day < 10)
+            {
+              end_day = "0" + end_day;
+            }
+            var end_formatted = end_year + "-" + end_month + "-" + end_day;
+
+            window.location.href = "/bar_graph/?username="+theUser+"&start_date="+moment.utc(start_formatted)+"&end_date="+moment.utc(end_formatted);
           }
         });
       });
@@ -136,9 +163,27 @@ function fetchNodes(username)
 
 <br>
 
-<label for="from">From</label>
-<input type="text" id="from" name="from">
-<label for="to">to</label>
-<input type="text" id="to" name="to">
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <div class="col-xs-5"></div>
+    <div class="col-xs-2">
+      <div class="row">
+        <h4>Restrict date range</h4>
+      </div>
+      <div class="row">
+        <label class="sr-only" for="from">Start Date</label>
+        <input type="text" id="from" name="from" class="form-control" placeholder="Start date">
+      </div>
+      <div class="row">
+        <br>
+      </div>
+      <div class="row">
+        <label class="sr-only" for="to">End Date</label>
+        <input type="text" id="to" name="to" class="form-control" placeholder="End date">
+      </div>
+    </div>
+  </div>
+</form>
+
 
 </center>
