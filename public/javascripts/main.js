@@ -133,7 +133,7 @@ var osm = {
 				}
 				point = results[i];
 
-				// every 100th, update the time display
+				// every 10th, update the time display
 				if (i % 10 === 0 || ((results.length - i) < 10)) {
 					$('.time').text(moment.utc(point.obj.properties.timestamp).format("hh:mm A"))
 				}
@@ -142,7 +142,7 @@ var osm = {
 				
 				text = _.template($('#markerTemplate').html(), {
 					user: point.obj.properties.user,
-					date: point.obj.properties.timestamp
+					time: moment.utc(point.obj.properties.timestamp).format("hh:mm A")
 				}, {
 					interpolate : /\{\{(.+?)\}\}/g
 				});
