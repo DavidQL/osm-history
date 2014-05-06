@@ -40,6 +40,10 @@
   display:table;
 }
 
+.navbar-brand {
+  color:white !important;
+}
+
 #ui-datepicker-div {
   z-index: 2000 !important;
 }
