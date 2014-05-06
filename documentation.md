@@ -1,10 +1,9 @@
-Documentation
-
 Requirements: Visualize changes made to the OSM databases. 
-	- Given time and location, show the amound of changes made and who the greatest contributers are
-	- Given OSM user, show the contributions they made.
+* Given time and location, show the amound of changes made and who the greatest contributers are
+* Given OSM user, show the contributions they made.
 
 Arcihtecture/Design: 
+
 	bin/
 		www
 	db/
@@ -29,7 +28,6 @@ Arcihtecture/Design:
 		error.ejs
 		index.ejs
 		layout.ejs
-		layout_old.ejs
 		line_graph.ejs
 		map.ejs
 	app.js
